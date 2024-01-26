@@ -5,6 +5,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as MailIndexImport } from './routes/mail/index'
+import { Route as AuthSignInImport } from './routes/auth/sign-in'
 
 // Create/Update Routes
 
@@ -18,12 +19,21 @@ const MailIndexRoute = MailIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthSignInRoute = AuthSignInImport.update({
+  path: '/auth/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/sign-in': {
+      preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
     }
     '/mail/': {
@@ -35,4 +45,8 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, MailIndexRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  AuthSignInRoute,
+  MailIndexRoute,
+])

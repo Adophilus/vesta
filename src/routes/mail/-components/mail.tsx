@@ -71,10 +71,10 @@ export function Mail({
           collapsible={true}
           minSize={15}
           maxSize={20}
-          onCollapse={(collapsed) => {
-            setIsCollapsed(collapsed)
+          onCollapse={() => {
+            setIsCollapsed(!isCollapsed)
             document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-              collapsed
+              !isCollapsed
             )}`
           }}
           className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}

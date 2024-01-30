@@ -1,5 +1,5 @@
 import { ComponentProps } from "react"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import {formatDistanceToNow} from "date-fns/formatDistanceToNow"
 
 import { cn } from "@/lib/shad/utils"
 import { Badge } from "@/components/shad/ui/badge"

@@ -1,4 +1,5 @@
 import { setDoc, getManyDocs, listDocs, ListResults, Doc } from "@junobuild/core";
+import { ulid } from "ulidx";
 
 namespace MailService {
   const COLLECTION_KEY = "mails"
@@ -12,7 +13,7 @@ namespace MailService {
     cc: string[]
     bcc: string[]
     sentAt: Date
-    replyTo: string
+    replyToMailId: string
     title: string
     body: string
     isRead: boolean
@@ -38,16 +39,16 @@ namespace MailService {
       .map(item => item.data)
   }
 
-  export const createMail = async () => {
+  type CreateMailPayload = Mail
+
+  export const createMail = async (payload: CreateMailPayload) => {
     await setDoc<Mail>({
-      collection: "my_collection_key",
+      collection: COLLECTION_KEY,
       doc: {
-        key: "my_document_key",
-        data: myExample,
+        key: ulid(),
+        data: payload,
       },
     });
-
-
   }
 }
 

@@ -94,6 +94,9 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
+  ulidx:
+    specifier: ^2.2.1
+    version: 2.2.1
   zustand:
     specifier: ^4.5.0
     version: 4.5.0(@types/react@18.2.48)(react@18.2.0)
@@ -3088,6 +3091,10 @@ packages:
       json-buffer: 3.0.1
     dev: true
 
+  /layerr@2.0.1:
+    resolution: {integrity: sha512-z0730CwG/JO24evdORnyDkwG1Q7b7mF2Tp1qRQ0YvrMMARbt1DFG694SOv439Gm7hYKolyZyaB49YIrYIfZBdg==}
+    dev: false
+
   /levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -4042,6 +4049,13 @@ packages:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /ulidx@2.2.1:
+    resolution: {integrity: sha512-DU9F5t1tihdafuNyW3fIrXUFHHiHxmwuQSGVGIbSpqkc93IH4P0dU8nPhk0gOW7ARxaFu4+P/9cxVwn6PdnIaQ==}
+    engines: {node: '>=16'}
+    dependencies:
+      layerr: 2.0.1
+    dev: false
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}

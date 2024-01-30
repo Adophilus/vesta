@@ -13,7 +13,10 @@ namespace MailService {
     cc: string[]
     bcc: string[]
     sentAt: Date
-    replyToMailId: string
+    replyToMail?: {
+      id: string
+      title: string
+    }
     title: string
     body: string
     isRead: boolean

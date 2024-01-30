@@ -3,17 +3,18 @@ import * as React from "react"
 import { cn } from "@/lib/shad/utils"
 import { Button } from "@/components/shad/ui/button"
 import { DiscIcon, Loader2Icon } from "lucide-react"
-import AuthService from "@/lib/services/auth"
+import { useAuthStore } from "@/lib/hooks/auth"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const signIn = useAuthStore(store => store.signIn)
 
   async function onSubmit() {
     setIsLoading(true)
 
-    await AuthService.login()
+    await signIn()
 
     setIsLoading(false)
   }

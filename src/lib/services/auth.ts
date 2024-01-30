@@ -1,4 +1,4 @@
-import { signIn, authSubscribe, User, initJuno } from "@junobuild/core";
+import { signIn as junoSignIn, authSubscribe, User, initJuno } from "@junobuild/core";
 
 namespace AuthService {
   export const init = async () => {
@@ -10,7 +10,7 @@ namespace AuthService {
     });
   }
 
-  export const login = async () => await signIn()
+  export const signIn = async () => await junoSignIn()
 
   export const subscribe = (callback: (user: User | null) => void) => {
     return authSubscribe(callback)

@@ -2,22 +2,20 @@ import * as React from "react"
 
 import { cn } from "@/lib/shad/utils"
 import { Button } from "@/components/shad/ui/button"
-import { Input } from "@/components/shad/ui/input"
-import { Label } from "@/components/shad/ui/label"
 import { DiscIcon, Loader2Icon } from "lucide-react"
+import AuthService from "@/lib/services/auth"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
+  async function onSubmit() {
     setIsLoading(true)
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    await AuthService.login()
+
+    setIsLoading(false)
   }
 
   return (

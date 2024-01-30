@@ -5,6 +5,7 @@ import "./styles/globals.css"
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import AuthService from './lib/services/auth'
 
 // Create a new router instance
 const router = createRouter({ routeTree })
@@ -15,6 +16,8 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
+
+await AuthService.init()
 
 // Render the app
 const rootElement = document.getElementById('root')!

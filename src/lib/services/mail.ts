@@ -1,33 +1,12 @@
 import { setDoc, getManyDocs, listDocs, ListResults, Doc } from "@junobuild/core";
 import { ulid } from "ulidx";
+import MailInterface from "../interfaces/mail";
 
 namespace MailService {
   const COLLECTION_KEY = "mails"
 
-  export type MailTag = "MEETING" | "WORK" | "IMPORTANT"
-
-  export type Mail = {
-    organizationId: string
-    folder: "INBOX" | "DRAFT" | "SENT" | "JUNK" | "TRASH" | "ARCHIVE"
-    senderId: string
-    cc: string[]
-    bcc: string[]
-    sentAt: Date
-    replyToMail?: {
-      id: string
-      title: string
-    }
-    title: string
-    body: string
-    isRead: boolean
-    isStarred: boolean
-    labels: string[]
-    isMuted: boolean
-    tags: MailTag[]
-  }
-
-  export const getMails = async (): Promise<Mail[]> => {
-    const docs: ListResults<Doc<Mail>> = await listDocs({
+  export const getMails = async (): Promise<MailInterface.Mail[]> => {
+    const docs: ListResults<Doc<MailInterface.Mail>> = await listDocs({
       collection: COLLECTION_KEY,
       filter: {
         order: {
@@ -42,14 +21,17 @@ namespace MailService {
       .map(item => item.data)
   }
 
-  type CreateMailPayload = Mail
+  type CreateMailPayload = Omit<MailInterface.Mail, "sentAt">
 
-  export const createMail = async (payload: CreateMailPayload) => {
-    await setDoc<Mail>({
+  export const sendMail = async (payload: CreateMailPayload) => {
+    return setDoc<MailInterface.Mail>({
       collection: COLLECTION_KEY,
       doc: {
         key: ulid(),
-        data: payload,
+        data: {
+          ...payload,
+          sentAt: new Date()
+        }
       },
     });
   }

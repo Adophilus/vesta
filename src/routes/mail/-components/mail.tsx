@@ -7,6 +7,7 @@ import {
   Inbox,
   MessagesSquare,
   PenBox,
+  PenIcon,
   Search,
   Send,
   ShoppingCart,
@@ -31,6 +32,8 @@ import {
 } from "@/components/shad/ui/tabs"
 import { TooltipProvider } from "@/components/shad/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/shad/ui/resizable"
+import { Button } from "@/components/shad/ui/button"
+import { MailCompose } from "./mail-compose"
 
 interface MailProps {
   accounts: {
@@ -82,6 +85,8 @@ export function Mail({
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
             <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts} />
           </div>
+          <Separator />
+          <MailCompose />
           <Separator />
           <Nav
             isCollapsed={isCollapsed}

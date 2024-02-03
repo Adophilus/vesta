@@ -5,7 +5,7 @@ import { combine } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
-import { redirect } from "@tanstack/react-router";
+import { redirect, useNavigate } from "@tanstack/react-router";
 
 type AuthStore = {
   isSignedIn: false
@@ -64,31 +64,32 @@ export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: Reac
 
 export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const init = useAuthStore(store => store.init)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const unsubscribe = init((user) => {
-      console.log("user", user)
       if (!user) {
-        throw redirect({
+        navigate({
           to: "/auth/sign-in"
         })
+        return
       }
 
-      console.log(user.profiles)
       if (user.profiles.length === 0) {
-        console.log("redirecting to /profile/create")
-        throw redirect({
+        navigate({
           to: "/profile/create"
         })
+        return
       }
 
-      throw redirect({
+      navigate({
         to: "/mail"
       })
+      return
     })
 
     return unsubscribe
-  }, [init])
+  }, [init, navigate])
 
   return children
 }

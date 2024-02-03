@@ -5,6 +5,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as MailIndexImport } from './routes/mail/index'
+import { Route as ProfileCreateImport } from './routes/profile/create'
 import { Route as AuthSignInImport } from './routes/auth/sign-in'
 
 // Create/Update Routes
@@ -16,6 +17,11 @@ const IndexRoute = IndexImport.update({
 
 const MailIndexRoute = MailIndexImport.update({
   path: '/mail/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileCreateRoute = ProfileCreateImport.update({
+  path: '/profile/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,6 +42,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
     }
+    '/profile/create': {
+      preLoaderRoute: typeof ProfileCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/mail/': {
       preLoaderRoute: typeof MailIndexImport
       parentRoute: typeof rootRoute
@@ -48,5 +58,6 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthSignInRoute,
+  ProfileCreateRoute,
   MailIndexRoute,
 ])

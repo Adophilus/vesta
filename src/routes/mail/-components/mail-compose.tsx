@@ -1,23 +1,24 @@
 import { Button } from "@/components/shad/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/shad/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/shad/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/shad/ui/form";
 import { Input } from "@/components/shad/ui/input";
-import { Label } from "@/components/shad/ui/label";
 import { Loader2Icon, PenIcon, SendHorizonalIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import MailService from "@/lib/services/mail";
 import { Textarea } from "@/components/shad/ui/textarea";
-import { useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { toast } from "sonner";
 
 export function MailCompose() {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <div className="p-2">
-      <Dialog>
+      <Dialog open={isOpen}>
         <DialogTrigger asChild>
-          <Button className="w-full" variant="outline">
+          <Button onClick={() => setIsOpen(true)} className="w-full" variant="outline">
             <PenIcon className="h-4 w-4 mr-2" />
             Compose
           </Button>
@@ -26,7 +27,7 @@ export function MailCompose() {
           <DialogHeader>
             <DialogTitle>Compose mail</DialogTitle>
           </DialogHeader>
-          <ComposeMailForm />
+          <ComposeMailForm onSend={() => setIsOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>
@@ -39,12 +40,11 @@ const formSchema = z.object({
   cc: z.array(z.string().email()),
   bcc: z.array(z.string().email()),
   body: z.string(),
-
 })
 
 type FormSchema = z.infer<typeof formSchema>
 
-const ComposeMailForm = () => {
+const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) => {
   const [isSending, setIsSending] = useState(false)
 
   const form = useForm<FormSchema>({
@@ -61,7 +61,7 @@ const ComposeMailForm = () => {
   const onSubmit = async (data: FormSchema) => {
     setIsSending(true)
 
-    await MailService.sendMail({
+    await MailService.send({
       ...data,
       senderEmail: "",
       organizationId: ""
@@ -70,6 +70,7 @@ const ComposeMailForm = () => {
     toast.success("Mail sent successfully!")
 
     setIsSending(false)
+    onSend()
   }
 
   return (

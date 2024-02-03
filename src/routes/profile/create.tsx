@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { SignInForm } from './-components/sign-in-form'
+import { CreateProfileForm } from './-components/create-profile-form'
 
-export const Route = createFileRoute('/auth/sign-in')({
-  component: SignInPage
+export const Route = createFileRoute('/profile/create')({
+  component: CreateProfilePage
 })
 
-export default function SignInPage() {
+export default function CreateProfilePage() {
   return (
     <>
       <div className="container relative h-full flex flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -13,7 +13,7 @@ export default function SignInPage() {
           <div className="absolute inset-0 bg-zinc-900" />
         </div>
         <div className="lg:p-8">
-          <SignInForm />
+          <CreateProfileForm />
         </div>
       </div>
     </>

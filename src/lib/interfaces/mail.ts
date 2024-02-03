@@ -12,6 +12,19 @@ namespace MailInterface {
     body: string
     sentAt: Date
   }
+
+  export type MailReceived = {
+    mailId: string
+    recipientEmail: string
+    replyToMailId?: {
+      id: string
+      title: string
+    }
+    isRead: boolean
+    isMuted: boolean
+    isStarred: boolean
+    tags: MailTag[]
+  }
 }
 
 export default MailInterface

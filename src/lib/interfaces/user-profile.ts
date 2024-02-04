@@ -1,6 +1,8 @@
 namespace UserProfileInterface {
   export type UserProfile = {
-    id: string
+    firstName: string
+    lastName: string
+    userId: string
     email: string
     organizationId?: string
   }

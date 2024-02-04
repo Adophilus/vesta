@@ -12,7 +12,7 @@ namespace UserProfileService {
       collection: COLLECTION_KEY,
       doc: {
         key: ulid(),
-        description: `<|id:${payload.id}|><|organizationId:${payload.organizationId}|>`,
+        description: `<|userId:${payload.userId}|><|organizationId:${payload.organizationId}|>`,
         data: payload
       }
     })
@@ -20,12 +20,12 @@ namespace UserProfileService {
     return profile
   }
 
-  export const getProfilesById = async (id: string) => {
+  export const getProfilesByUserId = async (id: string) => {
     const profiles = await listDocs<UserProfileInterface.UserProfile>({
       collection: COLLECTION_KEY,
       filter: {
         matcher: {
-          description: `<|id:${id}|>`
+          description: `<|userId:${id}|>`
         }
       }
     })

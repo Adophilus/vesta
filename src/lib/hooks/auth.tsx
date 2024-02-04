@@ -5,7 +5,7 @@ import { combine } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
-import { redirect, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 type AuthStore = {
   isSignedIn: false
@@ -19,12 +19,34 @@ type AuthStore = {
 
 export const useAuthStore = create(
   combine(
-    { user: null } as AuthStore,
-    (set) => ({
-      signIn: async () => {
+    {
+      user: null,
+      isSignedIn: false,
+      profiles: null
+    } as AuthStore,
+    (set, get) => {
+
+      const signIn = async () => {
         await AuthService.signIn()
-      },
-      init: (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile[] } | null) => void) => {
+      }
+
+      const refetchProfiles = async (_userId?: string, update = true) => {
+        const userId = _userId ?? get().user?.key
+        if (!userId) return []
+
+        const profiles = await UserProfileService.getProfilesByUserId(userId)
+        const mappedProfiles = profiles.map((profile) => profile.data)
+
+        if (!update) return mappedProfiles
+
+        set({
+          profiles: mappedProfiles
+        })
+
+        return mappedProfiles
+      }
+
+      const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile[] } | null) => void) => {
         return AuthService.subscribe(async (user) => {
           if (!user) {
             set({
@@ -37,21 +59,20 @@ export const useAuthStore = create(
             return
           }
 
-          const profiles = await UserProfileService.getProfilesById(user.key)
-          const mappedProfiles = profiles.map((profile) => profile.data)
+          const profiles = await refetchProfiles(user.key, false)
 
           set({
             user,
-            profiles: mappedProfiles,
+            profiles,
             isSignedIn: true
           })
 
-          cb({ user, profiles: mappedProfiles })
+          cb({ user, profiles })
         })
       }
-    })
-  )
-)
+
+      return { init, signIn, refetchProfiles }
+    }))
 
 export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: ReactNode }> = ({ fallback, children }) => {
   const isSignedIn = useAuthStore(store => store.isSignedIn)

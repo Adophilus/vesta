@@ -1,18 +1,23 @@
-import * as React from "react"
+import { useEffect, useState } from "react"
 
 import { Button } from "@/components/shad/ui/button"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon, Loader2Icon } from "lucide-react"
 import { useAuthStore } from "@/lib/hooks/auth"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/shad/ui/form"
 import { Input } from "@/components/shad/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shad/ui/select"
+import { SelectGroup } from "@radix-ui/react-select"
+import UserProfileService from "@/lib/services/user-profile"
 
 const formSchema = z.object({
-  email: z.string()
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  emailExtension: z.string()
 })
 
 const emailExtensions = [
@@ -22,19 +27,42 @@ const emailExtensions = [
 type FormSchema = z.infer<typeof formSchema>
 
 export function CreateProfileForm() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const signIn = useAuthStore(store => store.signIn)
+  const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { user, profiles, refetchProfiles } = useAuthStore(store => ({
+    user: store.user!,
+    profiles: store.profiles!,
+    refetchProfiles: store.refetchProfiles
+  }))
+
+  useEffect(() => {
+    if (profiles.length > 0)
+      navigate({
+        to: "/mail"
+      })
+  }, [profiles, navigate])
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      emailExtension: emailExtensions[0]
+    }
   })
 
-  async function onSubmit() {
-    setIsLoading(true)
+  async function onSubmit(data: FormSchema) {
+    setIsSubmitting(true)
 
-    await signIn()
+    await UserProfileService.createProfile({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: `${data.email}@${data.emailExtension}`,
+      userId: user.key,
+      organizationId: "" // TODO: Add organizationId
+    })
 
-    setIsLoading(false)
+    await refetchProfiles()
+
+    setIsSubmitting(false)
   }
 
   return (
@@ -50,6 +78,34 @@ export function CreateProfileForm() {
             </p>
           </div>
           <div className="grid gap-6">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="email"
@@ -57,25 +113,33 @@ export function CreateProfileForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} />
-                    <Select value={emailExtensions[0]}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an email extension" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {emailExtensions.map((extension) => (
-                          <SelectItem value={extension}>{extension}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="flex gap-4">
+                      <Input {...field} />
+                      <Select value={emailExtensions[0]} onValueChange={(value) => form.setValue("emailExtension", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an email extension" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {emailExtensions.map((extension) => (
+                              <SelectItem value={extension}>{extension}</SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading}>
-              Continue
-              <ArrowRightIcon className="ml-2 h-4 w-4" />
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2Icon className="animate-spin w-4 h-4" /> : (
+                <>
+                  Continue
+                  <ArrowRightIcon className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">

@@ -4,9 +4,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as MailIndexImport } from './routes/mail/index'
 import { Route as ProfileCreateImport } from './routes/profile/create'
+import { Route as MailLayoutImport } from './routes/mail/_layout'
 import { Route as AuthSignInImport } from './routes/auth/sign-in'
+import { Route as MailInboxIndexImport } from './routes/mail/inbox/index'
 
 // Create/Update Routes
 
@@ -15,18 +16,23 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const MailIndexRoute = MailIndexImport.update({
-  path: '/mail/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ProfileCreateRoute = ProfileCreateImport.update({
   path: '/profile/create',
   getParentRoute: () => rootRoute,
 } as any)
 
+const MailLayoutRoute = MailLayoutImport.update({
+  path: '/mail/layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthSignInRoute = AuthSignInImport.update({
   path: '/auth/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MailInboxIndexRoute = MailInboxIndexImport.update({
+  path: '/mail/inbox/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,12 +48,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
     }
+    '/mail/_layout': {
+      preLoaderRoute: typeof MailLayoutImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/create': {
       preLoaderRoute: typeof ProfileCreateImport
       parentRoute: typeof rootRoute
     }
-    '/mail/': {
-      preLoaderRoute: typeof MailIndexImport
+    '/mail/inbox/': {
+      preLoaderRoute: typeof MailInboxIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -58,6 +68,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthSignInRoute,
+  MailLayoutRoute,
   ProfileCreateRoute,
-  MailIndexRoute,
+  MailInboxIndexRoute,
 ])

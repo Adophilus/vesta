@@ -61,7 +61,7 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
   const onSubmit = async (data: FormSchema) => {
     setIsSending(true)
 
-    await MailService.send({
+    await MailService.sendMail({
       ...data,
       senderEmail: "",
       organizationId: ""

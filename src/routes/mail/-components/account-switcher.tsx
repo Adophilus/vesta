@@ -49,6 +49,11 @@ export function AccountSwitcher({
               profiles.find((profile) => profile.email === selectedProfile?.email)
                 ?.firstName
             }
+{" "}
+            {
+              profiles.find((profile) => profile.email === selectedProfile?.email)
+                ?.lastName
+            }
           </span>
         </SelectValue>
       </SelectTrigger>

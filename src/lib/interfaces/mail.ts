@@ -1,6 +1,9 @@
 namespace MailInterface {
-  export type MailTag = "MEETING" | "WORK" | "IMPORTANT"
-  type MailFolder = "INBOX" | "DRAFT" | "SENT" | "JUNK" | "TRASH" | "ARCHIVE"
+  export const mailTags = ["MEETING", "WORK", "IMPORTANT"] as const
+  export type MailTag = typeof mailTags[number]
+
+  export const mailFolders = ["INBOX", "DRAFT", "SENT", "JUNK", "TRASH", "ARCHIVE"] as const
+  export type MailFolder = typeof mailFolders[number]
 
   export type Mail = {
     organizationId: string
@@ -14,6 +17,7 @@ namespace MailInterface {
   }
 
   export type MailReceived = {
+    folder: MailFolder
     mailId: string
     recipientEmail: string
     replyToMailId?: {

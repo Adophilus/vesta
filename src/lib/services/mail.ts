@@ -1,15 +1,23 @@
-import { setDoc, listDocs, ListResults, Doc } from "@junobuild/core";
+import { setDoc, listDocs, ListResults, Doc, User } from "@junobuild/core";
 import { ulid } from "ulidx";
 import MailInterface from "../interfaces/mail";
+import UserProfileInterface from "../interfaces/user-profile";
 
 namespace MailService {
   const MAIL_COLLECTION_KEY = "mails"
   const MAIL_RECEIVED_COLLECTION_KEY = "mails-received"
 
-  export const getMails = async (): Promise<MailInterface.Mail[]> => {
-    const docs: ListResults<Doc<MailInterface.Mail>> = await listDocs({
-      collection: MAIL_COLLECTION_KEY,
+  type GetMailsPayload = {
+    folder: MailInterface.MailFolder,
+    profile: UserProfileInterface.UserProfile
+  }
+  export const getMails = async ({ folder, profile }: GetMailsPayload): Promise<MailInterface.MailReceived[]> => {
+    const docs: ListResults<Doc<MailInterface.MailReceived>> = await listDocs({
+      collection: MAIL_RECEIVED_COLLECTION_KEY,
       filter: {
+        matcher: {
+          description: `<|recipientEmail:${profile.email}|>`
+        },
         order: {
           desc: true,
           field: "created_at",
@@ -17,8 +25,9 @@ namespace MailService {
       },
     });
 
-    return docs
-      .items
+    const mails = docs.items.filter(doc => doc.data.folder === folder)
+
+    return mails
       .map(item => item.data)
   }
 
@@ -41,7 +50,9 @@ namespace MailService {
         collection: MAIL_RECEIVED_COLLECTION_KEY,
         doc: {
           key: ulid(),
+          description: `<|recipientEmail:${recipient}|>`,
           data: {
+            folder: "INBOX",
             mailId: mail.key,
             recipientEmail: recipient,
             isRead: false,

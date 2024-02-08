@@ -5,7 +5,7 @@ import { combine } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter, useRouterState } from "@tanstack/react-router";
 
 type AuthStore = {
   isSignedIn: false
@@ -86,6 +86,8 @@ export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: Reac
 export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const init = useAuthStore(store => store.init)
   const navigate = useNavigate()
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
 
   useEffect(() => {
     const unsubscribe = init((user) => {
@@ -103,14 +105,16 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
         return
       }
 
-      navigate({
-        to: "/mail"
-      })
-      return
+      if (pathname === "/auth/sign-in") {
+        navigate({
+          to: "/mail/inbox"
+        })
+        return
+      }
     })
 
     return unsubscribe
-  }, [init, navigate])
+  }, [init, navigate, pathname])
 
   return children
 }

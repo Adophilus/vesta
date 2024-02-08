@@ -1,12 +1,12 @@
 import { Separator } from "@/components/shad/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shad/ui/tabs"
 import { createFileRoute } from "@tanstack/react-router"
-import { MailList } from "../-components/mail-list"
+import { MailList } from "./-components/mail-list"
 import { SearchIcon } from "lucide-react"
 import { Input } from "@/components/shad/ui/input"
-import { mails } from "../-components/data"
+import { mails } from "./-components/data"
 
-export const Route = createFileRoute('/mail/inbox/')({
+export const Route = createFileRoute('/_mail/mail/inbox')({
   component: MailInboxPage,
 })
 

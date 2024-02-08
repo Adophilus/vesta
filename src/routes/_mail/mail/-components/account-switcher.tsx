@@ -25,9 +25,6 @@ export const AccountSwitcher: FunctionComponent = () => {
   const activeProfile = profiles![activeProfileIndex!]
   const profileFullName = `${activeProfile.data.firstName} ${activeProfile.data.lastName}`
 
-  console.log(activeProfile)
-  console.log(profileFullName)
-
   return (
     <Select
       defaultValue={activeProfileIndex!.toString()}

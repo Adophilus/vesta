@@ -1,4 +1,4 @@
-import { setDoc, listDocs, ListResults, Doc, User } from "@junobuild/core";
+import { setDoc, listDocs, ListResults, Doc, User, getDoc } from "@junobuild/core";
 import { ulid } from "ulidx";
 import MailInterface from "../interfaces/mail";
 import UserProfileInterface from "../interfaces/user-profile";
@@ -7,15 +7,25 @@ namespace MailService {
   const MAIL_COLLECTION_KEY = "mails"
   const MAIL_RECEIVED_COLLECTION_KEY = "mails-received"
 
-  type GetMailsPayload = {
-    profile: UserProfileInterface.UserProfile
+  export const getSentMail = async (id: string): Promise<MailInterface.Mail.Fetch | undefined> => {
+    const mail: MailInterface.Mail.Fetch | undefined = await getDoc({
+      collection: MAIL_COLLECTION_KEY,
+      key: id
+    });
+
+    return mail
   }
-  export const getMails = async ({ profile }: GetMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
+
+  type GetReceivedMailsPayload = {
+    profile: UserProfileInterface.UserProfile.Fetch
+  }
+
+  export const getReceivedMails = async ({ profile }: GetReceivedMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
     const docs: ListResults<MailInterface.MailReceived.Fetch> = await listDocs({
       collection: MAIL_RECEIVED_COLLECTION_KEY,
       filter: {
         matcher: {
-          description: `<|recipientEmail:${profile.email}|>`
+          description: `<|recipientEmail:${profile.data.email}|>`
         },
         order: {
           desc: true,
@@ -54,6 +64,7 @@ namespace MailService {
             isRead: false,
             isMuted: false,
             isStarred: false,
+            labels: [], // TODO: Add labels
             tags: [] // TODO: Add tags
           }
         }

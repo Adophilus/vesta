@@ -7,33 +7,77 @@ import { ScrollArea } from "@/components/shad/ui/scroll-area"
 import { Separator } from "@/components/shad/ui/separator"
 import { Mail } from "./data"
 import { useMail } from "./use-mail"
-import { Link, useRouter } from "@tanstack/react-router"
+import { Link, useRouter, useRouterState } from "@tanstack/react-router"
 import { FunctionComponent } from "react"
 import MailInterface from "@/lib/interfaces/mail"
+import MailService from "@/lib/services/mail"
+import { useEffect } from "react"
+import { useState } from "react"
 
-const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }> = ({ mail }) => {
-  const router = useRouter()
-  console.log(router.basepath)
+type State = {
+  isLoading: true
+  mail: null
+} | {
+  isLoading: false
+  mail: null | MailInterface.Mail.Fetch
+}
+
+const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }> = ({ mail: mailReceived }) => {
+  const [state, setState] = useState<State>({ isLoading: true, mail: null })
+
+  const pathname = useRouterState({ select: state => state.location.pathname })
+  const mailLink = `/mail/inbox/${mailReceived.key}`
+  const isSelected = pathname === mailLink
+
+  const fetchMail = async () => {
+    const mail = await MailService.getSentMail(mailReceived.data.mailId)
+
+    if (!mail) {
+      setState({
+        isLoading: false,
+        mail: null
+      })
+      return
+    }
+
+    setState({
+      isLoading: false,
+      mail
+    })
+  }
+
+  useEffect(() => {
+    fetchMail()
+  }, [fetchMail])
+
+  const { mail, isLoading } = state
+
+  if (isLoading)
+    return null
+
+  if (!mail)
+    return null
 
   return (
     <Link
-      href={`/mail/inbox/${mail.key}`}
-      key={mail.key}
+      href={mailLink}
       className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
       activeProps={{ className: "bg-muted" }}
     >
       <div className="flex w-full flex-col gap-1">
         <div className="flex items-center">
           <div className="flex items-center gap-2">
-            <div className="font-semibold">{mail.name}</div>
-            {!mail.data.isRead && (
+            <div className="font-semibold">
+              {mail.data.title}
+            </div>
+            {!mailReceived.data.isRead && (
               <span className="flex h-2 w-2 rounded-full bg-blue-600" />
             )}
           </div>
           <div
             className={cn(
               "ml-auto text-xs",
-              mail.selected === mail.id
+              isSelected
                 ? "text-foreground"
                 : "text-muted-foreground"
             )}
@@ -43,18 +87,21 @@ const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }
             })*/}
           </div>
         </div>
-        <div className="text-xs font-medium">{mail.subject}</div>
+        <div className="text-xs font-medium">{mail.data.title}</div>
       </div>
       <div className="line-clamp-2 text-xs text-muted-foreground">
-        {mail.text.substring(0, 300)}
+        {mail.data.body.substring(0, 300)}
       </div>
-      {mail.labels.length ? (
+      {mailReceived.data.labels.length ? (
         <div className="flex items-center gap-2">
-          {mail.labels.map((label) => (
-            <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
-              {label}
-            </Badge>
-          ))}
+          {mailReceived
+            .data
+            .labels
+            .map((label) => (
+              <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
+                {label}
+              </Badge>
+            ))}
         </div>
       ) : null}
     </Link>
@@ -62,8 +109,6 @@ const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }
 }
 
 export const MailList: FunctionComponent<{ mails: MailInterface.MailReceived.Fetch[] }> = ({ mails }) => {
-  console.log(mails)
-
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col gap-2 p-4 pt-0">

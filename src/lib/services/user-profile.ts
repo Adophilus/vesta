@@ -1,4 +1,4 @@
-import { listDocs, setDoc } from "@junobuild/core"
+import { ListResults, listDocs, setDoc } from "@junobuild/core"
 import UserProfileInterface from "../interfaces/user-profile"
 import { ulid } from "ulidx"
 
@@ -20,8 +20,8 @@ namespace UserProfileService {
     return profile
   }
 
-  export const getProfilesByUserId = async (id: string) => {
-    const profiles = await listDocs<UserProfileInterface.UserProfile.Fetch>({
+  export const getProfilesByUserId = async (id: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
+    const profiles: ListResults<UserProfileInterface.UserProfile.Fetch> = await listDocs({
       collection: COLLECTION_KEY,
       filter: {
         matcher: {

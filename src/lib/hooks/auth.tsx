@@ -50,20 +50,11 @@ export const useAuthStore = create(
           })
         }
 
-        const refetchProfiles = async (_userId?: string, update = true) => {
+        const fetchProfiles = async (_userId: string) => {
           const userId = _userId ?? get().user?.key
           if (!userId) return []
 
-          const profiles = await UserProfileService.getProfilesByUserId(userId)
-          const mappedProfiles = profiles.map((profile) => profile.data)
-
-          if (!update) return mappedProfiles
-
-          set({
-            profiles: mappedProfiles
-          })
-
-          return mappedProfiles
+          return UserProfileService.getProfilesByUserId(userId)
         }
 
         const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile.Fetch[] } | null) => void) => {
@@ -79,7 +70,7 @@ export const useAuthStore = create(
               return
             }
 
-            const profiles = await refetchProfiles(user.key, false)
+            const profiles = await fetchProfiles(user.key)
 
             set({
               user,
@@ -95,7 +86,7 @@ export const useAuthStore = create(
         return {
           init,
           signIn,
-          refetchProfiles,
+          fetchProfiles,
           setActiveProfile
         }
       }),

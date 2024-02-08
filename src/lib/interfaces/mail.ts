@@ -4,6 +4,9 @@ namespace MailInterface {
   export const mailTags = ["MEETING", "WORK", "IMPORTANT"] as const
   export type MailTag = typeof mailTags[number]
 
+  export const mailLabels = []
+  export type MailLabel = typeof mailLabels[number]
+
   export const mailFolders = ["INBOX", "DRAFT", "SENT", "JUNK", "TRASH", "ARCHIVE"] as const
   export type MailFolder = typeof mailFolders[number]
 
@@ -35,6 +38,7 @@ namespace MailInterface {
       isMuted: boolean
       isStarred: boolean
       tags: MailTag[]
+      labels: MailLabel[]
     }
 
     export type Fetch = Doc<Create>

@@ -18,7 +18,7 @@ export const userMailStore = create(
         const profile = useAuthStore.getState().profiles?.[0]
         if (!profile) return
 
-        const mails = await MailService.getMails({
+        const mails = await MailService.getReceivedMails({
           profile
         })
 

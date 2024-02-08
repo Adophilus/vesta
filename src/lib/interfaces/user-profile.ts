@@ -1,10 +1,16 @@
+import { Doc } from "@junobuild/core"
+
 namespace UserProfileInterface {
-  export type UserProfile = {
-    firstName: string
-    lastName: string
-    userId: string
-    email: string
-    organizationId?: string
+  export namespace UserProfile {
+    export type Create = {
+      firstName: string
+      lastName: string
+      userId: string
+      email: string
+      organizationId?: string
+    }
+
+    export type Fetch = Doc<Create>
   }
 }
 

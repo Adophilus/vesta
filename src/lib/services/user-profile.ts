@@ -5,10 +5,10 @@ import { ulid } from "ulidx"
 namespace UserProfileService {
   const COLLECTION_KEY = "users"
 
-  type CreateUserProfilePayload = UserProfileInterface.UserProfile
+  type CreateUserProfilePayload = UserProfileInterface.UserProfile.Create
 
   export const createProfile = async (payload: CreateUserProfilePayload) => {
-    const profile = await setDoc<UserProfileInterface.UserProfile>({
+    const profile = await setDoc<UserProfileInterface.UserProfile.Create>({
       collection: COLLECTION_KEY,
       doc: {
         key: ulid(),
@@ -21,7 +21,7 @@ namespace UserProfileService {
   }
 
   export const getProfilesByUserId = async (id: string) => {
-    const profiles = await listDocs<UserProfileInterface.UserProfile>({
+    const profiles = await listDocs<UserProfileInterface.UserProfile.Fetch>({
       collection: COLLECTION_KEY,
       filter: {
         matcher: {

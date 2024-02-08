@@ -1,28 +1,29 @@
 import { create } from "zustand"
 import { combine } from "zustand/middleware"
 import MailService from "@/lib/services/mail"
+import { useAuthStore } from "@/lib/hooks/auth"
+import MailInterface from "@/lib/interfaces/mail"
+
+type MailStore = {
+  mails: MailInterface.MailReceived.Fetch[]
+}
 
 export const userMailStore = create(
   combine(
     {
-      inbox: [] as MailService.Mail[],
-      draft: [] as MailService.Mail[],
-      sent: [] as MailService.Mail[],
-      junk: [] as MailService.Mail[],
-      trash: [] as MailService.Mail[],
-      archive: [] as MailService.Mail[]
-    },
+      mails: [],
+    } as MailStore,
     (set) => ({
-      refetch: async () => {
-        const mails = await MailService.getMails()
+      load: async () => {
+        const profile = useAuthStore.getState().profiles?.[0]
+        if (!profile) return
+
+        const mails = await MailService.getMails({
+          profile
+        })
 
         set({
-          inbox: mails.filter((mail) => mail.folder === "INBOX"),
-          draft: mails.filter((mail) => mail.folder === "DRAFT"),
-          sent: mails.filter((mail) => mail.folder === "SENT"),
-          junk: mails.filter((mail) => mail.folder === "JUNK"),
-          trash: mails.filter((mail) => mail.folder === "TRASH"),
-          archive: mails.filter((mail) => mail.folder === "ARCHIVE")
+          mails
         })
       }
     })

@@ -38,7 +38,7 @@ export function CreateProfileForm() {
   useEffect(() => {
     if (profiles.length > 0)
       navigate({
-        to: "/mail"
+        to: "/mail/inbox"
       })
   }, [profiles, navigate])
 

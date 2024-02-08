@@ -5,12 +5,15 @@ import { MailList } from "./-components/mail-list"
 import { SearchIcon } from "lucide-react"
 import { Input } from "@/components/shad/ui/input"
 import { mails } from "./-components/data"
+import { userMailStore } from "./-components/store"
 
 export const Route = createFileRoute('/_mail/mail/inbox')({
   component: MailInboxPage,
 })
 
 function MailInboxPage() {
+  const mails = userMailStore(store => store.mails)
+
   return (
     <Tabs defaultValue="all">
       <div className="flex items-center px-4 py-2">
@@ -30,11 +33,11 @@ function MailInboxPage() {
         </form>
       </div>
       <TabsContent value="all" className="m-0">
-        <MailList items={mails} />
+        <MailList mails={mails} />
       </TabsContent>
-      <TabsContent value="unread" className="m-0">
-        <MailList items={mails.filter((item) => !item.read)} />
-      </TabsContent>
+      {/*<TabsContent value="unread" className="m-0">
+        <MailList mails={mails.filter((item) => !item.read)} />
+      </TabsContent>*/}
     </Tabs>
   )
 }

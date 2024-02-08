@@ -8,11 +8,10 @@ namespace MailService {
   const MAIL_RECEIVED_COLLECTION_KEY = "mails-received"
 
   type GetMailsPayload = {
-    folder: MailInterface.MailFolder,
     profile: UserProfileInterface.UserProfile
   }
-  export const getMails = async ({ folder, profile }: GetMailsPayload): Promise<MailInterface.MailReceived[]> => {
-    const docs: ListResults<Doc<MailInterface.MailReceived>> = await listDocs({
+  export const getMails = async ({ profile }: GetMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
+    const docs: ListResults<MailInterface.MailReceived.Fetch> = await listDocs({
       collection: MAIL_RECEIVED_COLLECTION_KEY,
       filter: {
         matcher: {
@@ -25,16 +24,13 @@ namespace MailService {
       },
     });
 
-    const mails = docs.items.filter(doc => doc.data.folder === folder)
-
-    return mails
-      .map(item => item.data)
+    return docs.items
   }
 
-  type CreateMailPayload = Omit<MailInterface.Mail, "sentAt">
+  type CreateMailPayload = Omit<MailInterface.Mail.Create, "sentAt">
 
-  export const sendMail = async (payload: CreateMailPayload) => {
-    const mail = await setDoc<MailInterface.Mail>({
+  export const sendMail = async (payload: CreateMailPayload): Promise<MailInterface.Mail.Fetch> => {
+    const mail = await setDoc<MailInterface.Mail.Create>({
       collection: MAIL_COLLECTION_KEY,
       doc: {
         key: ulid(),
@@ -46,7 +42,7 @@ namespace MailService {
     });
 
     for (const recipient of [payload.recipientEmail, ...payload.cc, ...payload.bcc]) {
-      await setDoc<MailInterface.MailReceived>({
+      await setDoc<MailInterface.MailReceived.Create>({
         collection: MAIL_RECEIVED_COLLECTION_KEY,
         doc: {
           key: ulid(),

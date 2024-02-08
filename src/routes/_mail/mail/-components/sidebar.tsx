@@ -11,10 +11,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean,
   return (
     <>
       <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
-        <AccountSwitcher
-          isCollapsed={isCollapsed}
-          accounts={accounts}
-        />
+        <AccountSwitcher />
       </div>
       <Separator />
       <MailCompose />

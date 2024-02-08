@@ -1,78 +1,109 @@
 import { User } from "@junobuild/core";
 import { FunctionComponent, ReactNode, useEffect } from "react";
 import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { combine, persist } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
-import { useNavigate, useRouter, useRouterState } from "@tanstack/react-router";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 
-type AuthStore = {
+type SignedInState = {
   isSignedIn: false
   user: null
   profiles: null
-} | {
-  isSignedIn: true
-  user: User
-  profiles: UserProfileInterface.UserProfile[]
+  activeProfile: null
 }
 
+type SignedOutState = {
+  isSignedIn: true
+  user: User
+  profiles: UserProfileInterface.UserProfile.Fetch[]
+  activeProfile: number
+}
+
+export type AuthStore = SignedInState | SignedOutState
+
 export const useAuthStore = create(
-  combine(
-    {
-      user: null,
-      isSignedIn: false,
-      profiles: null
-    } as AuthStore,
-    (set, get) => {
+  persist(
+    combine(
+      {
+        isSignedIn: false,
+        user: null,
+        profiles: null,
+        activeProfile: null,
+      } as AuthStore,
+      (set, get) => {
 
-      const signIn = async () => {
-        await AuthService.signIn()
-      }
+        const signIn = async () => {
+          await AuthService.signIn()
+        }
 
-      const refetchProfiles = async (_userId?: string, update = true) => {
-        const userId = _userId ?? get().user?.key
-        if (!userId) return []
+        const setActiveProfile = async (index: number) => {
+          const { profiles, isSignedIn } = get()
 
-        const profiles = await UserProfileService.getProfilesByUserId(userId)
-        const mappedProfiles = profiles.map((profile) => profile.data)
+          if (!isSignedIn) return
 
-        if (!update) return mappedProfiles
-
-        set({
-          profiles: mappedProfiles
-        })
-
-        return mappedProfiles
-      }
-
-      const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile[] } | null) => void) => {
-        return AuthService.subscribe(async (user) => {
-          if (!user) {
-            set({
-              user: null,
-              isSignedIn: false
-            })
-
-            cb(null)
-
-            return
-          }
-
-          const profiles = await refetchProfiles(user.key, false)
+          if (index >= profiles.length) return
 
           set({
-            user,
-            profiles,
-            isSignedIn: true
+            activeProfile: index
+          })
+        }
+
+        const refetchProfiles = async (_userId?: string, update = true) => {
+          const userId = _userId ?? get().user?.key
+          if (!userId) return []
+
+          const profiles = await UserProfileService.getProfilesByUserId(userId)
+          const mappedProfiles = profiles.map((profile) => profile.data)
+
+          if (!update) return mappedProfiles
+
+          set({
+            profiles: mappedProfiles
           })
 
-          cb({ user, profiles })
-        })
-      }
+          return mappedProfiles
+        }
 
-      return { init, signIn, refetchProfiles }
-    }))
+        const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile.Fetch[] } | null) => void) => {
+          return AuthService.subscribe(async (user) => {
+            if (!user) {
+              set({
+                user: null,
+                isSignedIn: false
+              })
+
+              cb(null)
+
+              return
+            }
+
+            const profiles = await refetchProfiles(user.key, false)
+
+            set({
+              user,
+              profiles,
+              activeProfile: 0,
+              isSignedIn: true
+            })
+
+            cb({ user, profiles })
+          })
+        }
+
+        return {
+          init,
+          signIn,
+          refetchProfiles,
+          setActiveProfile
+        }
+      }),
+    {
+      name: "juno-auth"
+    }
+  )
+)
 
 export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: ReactNode }> = ({ fallback, children }) => {
   const isSignedIn = useAuthStore(store => store.isSignedIn)

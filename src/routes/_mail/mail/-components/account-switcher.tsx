@@ -8,32 +8,31 @@ import {
 } from "@/components/shad/ui/select"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { useState } from "react"
+import { FunctionComponent } from "react"
 
-interface AccountSwitcherProps {
-  isCollapsed: boolean
-  accounts: {
-    label: string
-    email: string
-    icon: React.ReactNode
-  }[]
-}
+export const AccountSwitcher: FunctionComponent = () => {
+  const {
+    profiles,
+    isSignedIn,
+    setActiveProfile,
+    activeProfile: activeProfileIndex
+  } = useAuthStore()
 
-export function AccountSwitcher({
-  isCollapsed,
-  accounts,
-}: AccountSwitcherProps) {
-  const profiles = useAuthStore((store) => store.profiles)
-  const [selectedProfile, setSelectedProfile] = useState(
-    profiles?.[0]
-  )
+  const isCollapsed = false
 
-  if (!profiles) return null
+  if (!isSignedIn) return null
+
+  const activeProfile = profiles![activeProfileIndex!]
+  const profileFullName = `${activeProfile.data.firstName} ${activeProfile.data.lastName}`
+
+  console.log(activeProfile)
+  console.log(profileFullName)
 
   return (
-    <Select defaultValue={selectedProfile?.email} onValueChange={(value) =>
-      setSelectedProfile(
-        profiles.find((profile) => profile.email === value)
-      )}>
+    <Select
+      defaultValue={activeProfileIndex!.toString()}
+      onValueChange={value => setActiveProfile(parseInt(value))}
+    >
       <SelectTrigger
         className={cn(
           "flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0",
@@ -43,23 +42,17 @@ export function AccountSwitcher({
         aria-label="Select account"
       >
         <SelectValue placeholder="Select an account">
-          {/*profiles?.find((profile) => profile.email === selectedProfile)?.icon*/}
           <span className={cn("ml-2", isCollapsed && "hidden")}>
-            {
-              profiles.find((profile) => profile.email === selectedProfile?.email)
-                ?.firstName
-            }
-{" "}
-            {
-              profiles.find((profile) => profile.email === selectedProfile?.email)
-                ?.lastName
-            }
+            {profileFullName}
           </span>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {profiles.map((profile) => (
-          <SelectItem key={profile.email} value={profile.email}>
+        {profiles!.map((profile, index) => (
+          <SelectItem
+            key={profile.data.email}
+            value={index.toString()}
+          >
             <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
               <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <title>Gmail</title>
@@ -68,7 +61,7 @@ export function AccountSwitcher({
                   fill="currentColor"
                 />
               </svg>
-              {profile.email}
+              {profile.data.email}
             </div>
           </SelectItem>
         ))}

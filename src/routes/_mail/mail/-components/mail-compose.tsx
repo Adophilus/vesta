@@ -10,6 +10,7 @@ import MailService from "@/lib/services/mail";
 import { Textarea } from "@/components/shad/ui/textarea";
 import { FunctionComponent, useState } from "react";
 import { toast } from "sonner";
+import { useAuthStore } from "@/lib/hooks/auth";
 
 export function MailCompose() {
   const [isOpen, setIsOpen] = useState(false)
@@ -36,7 +37,7 @@ export function MailCompose() {
 
 const formSchema = z.object({
   recipientEmail: z.string().email(),
-  title: z.string(),
+  subject: z.string(),
   cc: z.array(z.string().email()),
   bcc: z.array(z.string().email()),
   body: z.string(),
@@ -46,24 +47,33 @@ type FormSchema = z.infer<typeof formSchema>
 
 const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) => {
   const [isSending, setIsSending] = useState(false)
+  const { isSignedIn, profiles, activeProfileIndex } = useAuthStore(store => ({
+    isSignedIn: store.isSignedIn,
+    profiles: store.profiles,
+    activeProfileIndex: store.activeProfile
+  }))
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "Test",
-      recipientEmail: "test@localhost.com",
+      subject: "Test",
+      recipientEmail: "adophilus@myjunoapp.com",
       body: "This is a test email",
       cc: [],
       bcc: []
     }
   })
 
+  if (!isSignedIn || activeProfileIndex === null) return null
+  const profile = profiles![activeProfileIndex]
+  if (!profile) return null
+
   const onSubmit = async (data: FormSchema) => {
     setIsSending(true)
 
     await MailService.sendMail({
       ...data,
-      senderEmail: "",
+      senderEmail: profile.data.email,
       organizationId: ""
     })
 
@@ -94,11 +104,11 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
           />
           <FormField
             control={form.control}
-            name="title"
+            name="subject"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Title
+                  Subject
                 </FormLabel>
                 <FormControl>
                   <Input {...field} />

@@ -3,7 +3,7 @@ import { signIn as junoSignIn, authSubscribe, User, initJuno } from "@junobuild/
 namespace AuthService {
   export const init = async () => {
     await initJuno({
-      satelliteId: "pdurl-fqaaa-aaaal-adlga-cai",
+      satelliteId: "dwgre-oiaaa-aaaal-adsqq-cai",
       workers: {
         auth: true,
       },

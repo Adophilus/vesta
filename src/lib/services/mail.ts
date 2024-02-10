@@ -4,12 +4,12 @@ import MailInterface from "../interfaces/mail";
 import UserProfileInterface from "../interfaces/user-profile";
 
 namespace MailService {
-  const MAIL_COLLECTION_KEY = "mails"
-  const MAIL_RECEIVED_COLLECTION_KEY = "mails-received"
+  const MAILS_SENT_COLLECTION_KEY = "mails-sent"
+  const MAILS_RECEIVED_COLLECTION_KEY = "mails-received"
 
-  export const getSentMail = async (id: string): Promise<MailInterface.Mail.Fetch | undefined> => {
-    const mail: MailInterface.Mail.Fetch | undefined = await getDoc({
-      collection: MAIL_COLLECTION_KEY,
+  export const getSentMail = async (id: string): Promise<MailInterface.MailSent.Fetch | undefined> => {
+    const mail: MailInterface.MailSent.Fetch | undefined = await getDoc({
+      collection: MAILS_SENT_COLLECTION_KEY,
       key: id
     });
 
@@ -22,7 +22,7 @@ namespace MailService {
 
   export const getReceivedMails = async ({ profile }: GetReceivedMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
     const docs: ListResults<MailInterface.MailReceived.Fetch> = await listDocs({
-      collection: MAIL_RECEIVED_COLLECTION_KEY,
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
       filter: {
         matcher: {
           description: `<|recipientEmail:${profile.data.email}|>`
@@ -37,11 +37,20 @@ namespace MailService {
     return docs.items
   }
 
-  type CreateMailPayload = Omit<MailInterface.Mail.Create, "sentAt">
+  export const getReceivedMail = async (id: string): Promise<MailInterface.MailReceived.Fetch | undefined> => {
+    const doc: MailInterface.MailReceived.Fetch | undefined = await getDoc({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      key: id
+    });
 
-  export const sendMail = async (payload: CreateMailPayload): Promise<MailInterface.Mail.Fetch> => {
-    const mail = await setDoc<MailInterface.Mail.Create>({
-      collection: MAIL_COLLECTION_KEY,
+    return doc
+  }
+
+  type CreateMailPayload = Omit<MailInterface.MailSent.Create, "sentAt">
+
+  export const sendMail = async (payload: CreateMailPayload): Promise<MailInterface.MailSent.Fetch> => {
+    const mail = await setDoc<MailInterface.MailSent.Create>({
+      collection: MAILS_SENT_COLLECTION_KEY,
       doc: {
         key: ulid(),
         data: {
@@ -53,7 +62,7 @@ namespace MailService {
 
     for (const recipient of [payload.recipientEmail, ...payload.cc, ...payload.bcc]) {
       await setDoc<MailInterface.MailReceived.Create>({
-        collection: MAIL_RECEIVED_COLLECTION_KEY,
+        collection: MAILS_RECEIVED_COLLECTION_KEY,
         doc: {
           key: ulid(),
           description: `<|recipientEmail:${recipient}|>`,

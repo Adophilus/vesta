@@ -8,7 +8,7 @@ type MailStore = {
   mails: MailInterface.MailReceived.Fetch[]
 }
 
-export const userMailStore = create(
+export const useMailStore = create(
   combine(
     {
       mails: [],

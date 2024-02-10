@@ -61,6 +61,12 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.7
     version: 1.0.7(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/react-query':
+    specifier: ^5.20.1
+    version: 5.20.1(react@18.2.0)
+  '@tanstack/react-query-devtools':
+    specifier: ^5.20.1
+    version: 5.20.1(@tanstack/react-query@5.20.1)(react@18.2.0)
   '@tanstack/react-router':
     specifier: ^1.15.22
     version: 1.15.22(react-dom@18.2.0)(react@18.2.0)
@@ -109,6 +115,9 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
+  true-myth:
+    specifier: ^7.1.0
+    version: 7.1.0
   ulidx:
     specifier: ^2.3.0
     version: 2.3.0
@@ -1842,6 +1851,34 @@ packages:
   /@tanstack/history@1.15.13:
     resolution: {integrity: sha512-ToaeMtK5S4YaxCywAlYexc7KPFN0esjyTZ4vXzJhXEWAkro9iHgh7m/4ozPJb7oTo65WkHWX0W9GjcZbInSD8w==}
     engines: {node: '>=12'}
+    dev: false
+
+  /@tanstack/query-core@5.20.1:
+    resolution: {integrity: sha512-OONHHYG5vzjob4An+EfzbW7TRyb+sCA0AEgHzUIMlV9NYlF7wIwbla3PUfB3ocnaK1gZyROf0Lux/CBSu0exBQ==}
+    dev: false
+
+  /@tanstack/query-devtools@5.20.1:
+    resolution: {integrity: sha512-sSYo+GW7tx28M6FpcGqzo/zblbTEKrCG8THXOPoNy+EL1Z7kX4JXhRcihyKu3mY8MS/wsGghrZ/R0VTt6JXmBA==}
+    dev: false
+
+  /@tanstack/react-query-devtools@5.20.1(@tanstack/react-query@5.20.1)(react@18.2.0):
+    resolution: {integrity: sha512-VMjNjWLTu4+k0pGAhcsI8igtUI93ksrn4QDruaxbXdvLE3Yvfj8eaDVCemkmAySk7pCQJf4hhdByB/yOKSmIsg==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.20.1
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-devtools': 5.20.1
+      '@tanstack/react-query': 5.20.1(react@18.2.0)
+      react: 18.2.0
+    dev: false
+
+  /@tanstack/react-query@5.20.1(react@18.2.0):
+    resolution: {integrity: sha512-KRkOtJ47tv9B3EXfjHkbPkiFzOzYCOid8BrYBozk0rm9JpDB2xSf71q8w1PRudlQW6QUQIEDI9E6NIMh6AlLUw==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.20.1
+      react: 18.2.0
     dev: false
 
   /@tanstack/react-router@1.15.22(react-dom@18.2.0)(react@18.2.0):
@@ -4261,6 +4298,11 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
+
+  /true-myth@7.1.0:
+    resolution: {integrity: sha512-DcdyFRHfNyG31HgNtxqrVAHmBf7y1w4YZCpU7IR2Ohytm4LITv+u075Vc3dLyK9cdEPq6K9398iao6YpkU8hHA==}
+    engines: {node: 18.* || >= 20.*}
+    dev: false
 
   /ts-api-utils@1.2.1(typescript@5.3.3):
     resolution: {integrity: sha512-RIYA36cJn2WiH9Hy77hdF9r7oEwxAtB/TS9/S4Qd90Ap4z5FSiin5zEiTL44OII1Y3IIlEvxwxFUVgrHSZ/UpA==}

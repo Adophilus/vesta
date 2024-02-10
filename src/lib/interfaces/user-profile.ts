@@ -1,4 +1,5 @@
 import { Doc } from "@junobuild/core"
+import { SerializedJunoDoc } from "@/lib/utils/serialize"
 
 namespace UserProfileInterface {
   export namespace UserProfile {
@@ -10,7 +11,7 @@ namespace UserProfileInterface {
       organizationId?: string
     }
 
-    export type Fetch = Doc<Create>
+    export type Fetch = SerializedJunoDoc<Doc<Create>>
   }
 }
 

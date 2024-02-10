@@ -22,6 +22,7 @@ export const AccountSwitcher: FunctionComponent = () => {
 
   if (!isSignedIn) return null
 
+  console.log("profiles(account-switcher):", profiles)
   const activeProfile = profiles![activeProfileIndex!]
   const profileFullName = `${activeProfile.data.firstName} ${activeProfile.data.lastName}`
 

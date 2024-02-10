@@ -14,8 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MailImport } from './routes/_mail'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileCreateImport } from './routes/profile/create'
+import { Route as LegalTermsImport } from './routes/legal/terms'
+import { Route as LegalPrivacyImport } from './routes/legal/privacy'
 import { Route as AuthSignInImport } from './routes/auth/sign-in'
-import { Route as MailMailInboxImport } from './routes/_mail/mail/inbox'
+import { Route as MailMailInboxImport } from './routes/_mail/mail/_inbox'
+import { Route as MailMailInboxMailReceivedIdImport } from './routes/_mail/mail/_inbox/$mailReceivedId'
 
 // Create/Update Routes
 
@@ -34,6 +37,16 @@ const ProfileCreateRoute = ProfileCreateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LegalTermsRoute = LegalTermsImport.update({
+  path: '/legal/terms',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LegalPrivacyRoute = LegalPrivacyImport.update({
+  path: '/legal/privacy',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthSignInRoute = AuthSignInImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRoute,
@@ -43,6 +56,12 @@ const MailMailInboxRoute = MailMailInboxImport.update({
   path: '/mail/inbox',
   getParentRoute: () => MailRoute,
 } as any)
+
+const MailMailInboxMailReceivedIdRoute =
+  MailMailInboxMailReceivedIdImport.update({
+    path: '/$mailReceivedId',
+    getParentRoute: () => MailMailInboxRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -60,13 +79,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
     }
+    '/legal/privacy': {
+      preLoaderRoute: typeof LegalPrivacyImport
+      parentRoute: typeof rootRoute
+    }
+    '/legal/terms': {
+      preLoaderRoute: typeof LegalTermsImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/create': {
       preLoaderRoute: typeof ProfileCreateImport
       parentRoute: typeof rootRoute
     }
-    '/_mail/mail/inbox': {
+    '/_mail/mail/_inbox': {
       preLoaderRoute: typeof MailMailInboxImport
       parentRoute: typeof MailImport
+    }
+    '/_mail/mail/_inbox/$mailReceivedId': {
+      preLoaderRoute: typeof MailMailInboxMailReceivedIdImport
+      parentRoute: typeof MailMailInboxImport
     }
   }
 }
@@ -75,8 +106,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  MailRoute.addChildren([MailMailInboxRoute]),
+  MailRoute.addChildren([
+    MailMailInboxRoute.addChildren([MailMailInboxMailReceivedIdRoute]),
+  ]),
   AuthSignInRoute,
+  LegalPrivacyRoute,
+  LegalTermsRoute,
   ProfileCreateRoute,
 ])
 

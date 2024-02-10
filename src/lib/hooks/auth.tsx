@@ -1,4 +1,4 @@
-import { User } from "@junobuild/core";
+import { User as JunoUser } from "@junobuild/core";
 import { FunctionComponent, ReactNode, useEffect } from "react";
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
@@ -6,6 +6,9 @@ import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { SerializedJunoDoc, serializeJunoDoc } from "../utils/serialize";
+
+type User = SerializedJunoDoc<JunoUser>
 
 type SignedInState = {
   isSignedIn: false
@@ -57,6 +60,18 @@ export const useAuthStore = create(
           return UserProfileService.getProfilesByUserId(userId)
         }
 
+        const refetchProfiles = async () => {
+          const { user } = get()
+
+          if (!user) return
+
+          const profiles = await fetchProfiles(user.key)
+
+          set({
+            profiles
+          })
+        }
+
         const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile.Fetch[] } | null) => void) => {
           return AuthService.subscribe(async (user) => {
             if (!user) {
@@ -70,16 +85,23 @@ export const useAuthStore = create(
               return
             }
 
-            const profiles = await fetchProfiles(user.key)
+            const processedUser = {
+              ...user,
+              created_at: new Date(Number(user?.created_at)),
+              updated_at: new Date(Number(user?.updated_at))
+            }
+
+            const profiles = await fetchProfiles(processedUser.key)
+              .then(profiles => profiles.map(profile => serializeJunoDoc(profile)))
 
             set({
-              user,
+              user: processedUser,
               profiles,
               activeProfile: 0,
               isSignedIn: true
             })
 
-            cb({ user, profiles })
+            cb({ user: processedUser, profiles })
           })
         }
 
@@ -87,6 +109,7 @@ export const useAuthStore = create(
           init,
           signIn,
           fetchProfiles,
+          refetchProfiles,
           setActiveProfile
         }
       }),
@@ -113,6 +136,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     const unsubscribe = init((user) => {
+
       if (!user) {
         navigate({
           to: "/auth/sign-in"

@@ -10,14 +10,14 @@ namespace MailInterface {
   export const mailFolders = ["INBOX", "DRAFT", "SENT", "JUNK", "TRASH", "ARCHIVE"] as const
   export type MailFolder = typeof mailFolders[number]
 
-  export namespace Mail {
+  export namespace MailSent {
     export type Create = {
       organizationId: string
       senderEmail: string
       recipientEmail: string
       cc: string[]
       bcc: string[]
-      title: string
+      subject: string
       body: string
       sentAt: Date
     }
@@ -32,7 +32,7 @@ namespace MailInterface {
       recipientEmail: string
       replyToMailId?: {
         id: string
-        title: string
+        subject: string
       }
       isRead: boolean
       isMuted: boolean

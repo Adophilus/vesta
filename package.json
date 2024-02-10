@@ -39,6 +39,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "jotai": "^2.6.4",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.315.0",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.15.22",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",

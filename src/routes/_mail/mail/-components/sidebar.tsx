@@ -6,8 +6,22 @@ import { AccountSwitcher } from "./account-switcher";
 import { accounts } from "./data";
 import { useState } from "react";
 import { cn } from "@/lib/shad/utils";
+import { useGetMailsReceived } from "./hooks/mail";
+import MailInterface from "@/lib/interfaces/mail";
+import { groupBy } from "lodash/groupBy";
+
+function countMailFolder(mails?: MailInterface.MailReceived.Fetch[]) {
+  if (mails) {
+    const groups = groupBy(mails, "folder")
+    console.log(groups)
+  }
+}
 
 export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean, setIsCollapsed: (_: boolean) => void }) {
+  const { data } = useGetMailsReceived()
+
+  const count = countMailFolder(data)
+
   return (
     <>
       <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
@@ -21,37 +35,37 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean,
         links={[
           {
             title: "Inbox",
-            label: "128",
+            label: count.inbox,
             icon: InboxIcon,
             variant: "default",
           },
           {
             title: "Drafts",
-            label: "9",
+            label: count.drafts,
             icon: FileIcon,
             variant: "ghost",
           },
           {
             title: "Sent",
-            label: "",
+            label: count.sent,
             icon: SendIcon,
             variant: "ghost",
           },
           {
             title: "Junk",
-            label: "23",
+            label: count.junk,
             icon: ArchiveXIcon,
             variant: "ghost",
           },
           {
             title: "Trash",
-            label: "",
+            label: count.trash,
             icon: Trash2Icon,
             variant: "ghost",
           },
           {
             title: "Archive",
-            label: "",
+            label: count.archive,
             icon: ArchiveIcon,
             variant: "ghost",
           },

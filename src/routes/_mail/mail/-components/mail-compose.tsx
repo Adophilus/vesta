@@ -11,6 +11,8 @@ import { Textarea } from "@/components/shad/ui/textarea";
 import { FunctionComponent, useState } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/lib/hooks/auth";
+import { useMailStore } from "./store";
+import { useGetMailsReceived } from "./hooks/mail";
 
 export function MailCompose() {
   const [isOpen, setIsOpen] = useState(false)
@@ -53,6 +55,8 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     activeProfileIndex: store.activeProfile
   }))
 
+  const { refetch } = useGetMailsReceived()
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,6 +82,8 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     })
 
     toast.success("Mail sent successfully!")
+
+    refetch()
 
     setIsSending(false)
     onSend()

@@ -3,16 +3,9 @@ import { cn } from "@/lib/shad/utils"
 import { ReactNode, useState } from "react"
 import { TooltipProvider } from "@/components/shad/ui/tooltip"
 import { Sidebar } from "./sidebar"
-import { useEffect } from "react"
-import { useMailStore } from "./store"
 
 export function Layout({ children }: { children: ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const load = useMailStore(store => store.load)
-
-  useEffect(() => {
-    load()
-  }, [load])
 
   return (
     <TooltipProvider delayDuration={0}>

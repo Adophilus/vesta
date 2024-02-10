@@ -196,8 +196,10 @@ export function MailDisplay({ mail }: { mail: MailInterface.MailSent.Fetch }) {
                 </AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
-                <div className="font-semibold">{mail.data.senderEmail}</div>
-                <div className="line-clamp-1 text-xs">{mail.data.subject}</div>
+                <div className="font-semibold">{mail.data.subject}</div>
+                <div className="line-clamp-1 text-xs">
+                  <span className="font-medium">From:</span> {mail.data.senderEmail}
+                </div>
                 <div className="line-clamp-1 text-xs">
                   <span className="font-medium">Reply-To:</span> {mail.data.senderEmail}
                 </div>
@@ -209,7 +211,7 @@ export function MailDisplay({ mail }: { mail: MailInterface.MailSent.Fetch }) {
           </div>
           <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-            {mail.text}
+            {mail.data.body}
           </div>
           <Separator className="mt-auto" />
           <div className="p-4">
@@ -217,7 +219,7 @@ export function MailDisplay({ mail }: { mail: MailInterface.MailSent.Fetch }) {
               <div className="grid gap-4">
                 <Textarea
                   className="p-4"
-                  placeholder={`Reply ${mail.name}...`}
+                  placeholder={`Reply ${mail.data.senderEmail}`}
                 />
                 <div className="flex items-center">
                   <Label

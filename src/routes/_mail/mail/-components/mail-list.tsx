@@ -32,29 +32,6 @@ const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }
   const isSelected = pathname === mailLink
   const { isLoading, isError, data: mail } = useGetMailSent(mailReceived.data.mailId)
 
-  // const fetchMail = async () => {
-  //   const mail = await MailService.getSentMail(mailReceived.data.mailId)
-  //
-  //   if (!mail) {
-  //     setState({
-  //       isLoading: false,
-  //       mail: null
-  //     })
-  //     return
-  //   }
-  //
-  //   setState({
-  //     isLoading: false,
-  //     mail
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   fetchMail()
-  // }, [fetchMail])
-
-  // const { mail, isLoading } = state
-
   // if (isLoading) return null
   // if (isError) return null
   if (!mail) return null

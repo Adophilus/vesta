@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { useGetMailSent } from "../-components/hooks/mail"
 import MailService from "@/lib/services/mail"
 import { AlertCircleIcon, Loader2Icon } from "lucide-react"
 import { MailDisplay } from "../-components/mail-display"
 import { Result } from "true-myth"
 import MailInterface from "@/lib/interfaces/mail"
+import { useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
 
 export const Route = createFileRoute('/_mail/mail/_inbox/$mailReceivedId')({
   component: MailReceivedPage,
@@ -18,6 +20,7 @@ export const Route = createFileRoute('/_mail/mail/_inbox/$mailReceivedId')({
 })
 
 function MailReceivedPage() {
+  const queryClient = useQueryClient()
   const mailReceivedResult = Route.useLoaderData()
   if (mailReceivedResult.isErr)
     return (
@@ -30,6 +33,20 @@ function MailReceivedPage() {
     )
 
   const mailReceived = mailReceivedResult.value
+
+  const router = useRouter()
+
+  const markMailAsRead = async () => {
+    await MailService.markReceivedMailAsRead(mailReceived)
+    router.invalidate()
+    queryClient.invalidateQueries({
+      queryKey: ["getMailsReceived"]
+    })
+  }
+
+  useEffect(() => {
+    markMailAsRead()
+  }, [])
 
   const { isLoading, error, isError, data: mail } = useGetMailSent(mailReceived.data.mailId)
 

@@ -9,6 +9,7 @@ import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { SerializedJunoDoc, serializeJunoDoc } from "../utils/serialize";
 
 type User = SerializedJunoDoc<JunoUser>
+type UserProfile = SerializedJunoDoc<UserProfileInterface.UserProfile.Fetch>
 
 type SignedInState = {
   isSignedIn: false
@@ -20,7 +21,7 @@ type SignedInState = {
 type SignedOutState = {
   isSignedIn: true
   user: User
-  profiles: UserProfileInterface.UserProfile.Fetch[]
+  profiles: UserProfile[]
   activeProfile: number
 }
 
@@ -66,13 +67,15 @@ export const useAuthStore = create(
           if (!user) return
 
           const profiles = await fetchProfiles(user.key)
+            .then(profiles => profiles
+              .map(profile => serializeJunoDoc(profile)))
 
           set({
             profiles
           })
         }
 
-        const init = (cb: (user: { user: User, profiles: UserProfileInterface.UserProfile.Fetch[] } | null) => void) => {
+        const init = (cb: (user: { user: User, profiles: UserProfile[] } | null) => void) => {
           return AuthService.subscribe(async (user) => {
             if (!user) {
               set({
@@ -92,7 +95,8 @@ export const useAuthStore = create(
             }
 
             const profiles = await fetchProfiles(processedUser.key)
-              .then(profiles => profiles.map(profile => serializeJunoDoc(profile)))
+              .then(profiles => profiles
+                .map(profile => serializeJunoDoc(profile)))
 
             set({
               user: processedUser,

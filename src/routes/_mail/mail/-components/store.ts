@@ -15,12 +15,15 @@ export const useMailStore = create(
     } as MailStore,
     (set) => ({
       load: async () => {
+        console.log("loading mails...")
+
         const profile = useAuthStore.getState().profiles?.[0]
         if (!profile) return
 
         const mails = await MailService.getReceivedMails({
           profile
         })
+        console.log("loaded new mails...")
 
         set({
           mails

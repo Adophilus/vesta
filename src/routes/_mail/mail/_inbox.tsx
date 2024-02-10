@@ -4,7 +4,6 @@ import { createFileRoute, Outlet } from "@tanstack/react-router"
 import { MailList } from "./-components/mail-list"
 import { SearchIcon } from "lucide-react"
 import { Input } from "@/components/shad/ui/input"
-import { Loader2Icon } from "lucide-react"
 
 import { Layout } from "./_inbox/-components/layout"
 import { useGetMailsReceived } from "./-components/hooks/mail"

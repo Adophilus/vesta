@@ -2,6 +2,7 @@ import { setDoc, listDocs, ListResults, Doc, User, getDoc } from "@junobuild/cor
 import { ulid } from "ulidx";
 import MailInterface from "../interfaces/mail";
 import UserProfileInterface from "../interfaces/user-profile";
+import { SerializedJunoDoc } from "../utils/serialize";
 
 namespace MailService {
   const MAILS_SENT_COLLECTION_KEY = "mails-sent"
@@ -17,7 +18,7 @@ namespace MailService {
   }
 
   type GetReceivedMailsPayload = {
-    profile: UserProfileInterface.UserProfile.Fetch
+    profile: SerializedJunoDoc<UserProfileInterface.UserProfile.Fetch>
   }
 
   export const getReceivedMails = async ({ profile }: GetReceivedMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
@@ -81,6 +82,19 @@ namespace MailService {
     }
 
     return mail
+  }
+
+  export const markReceivedMailAsRead = async (mail: MailInterface.MailReceived.Fetch) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          isRead: true
+        }
+      }
+    })
   }
 }
 

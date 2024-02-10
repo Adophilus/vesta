@@ -53,14 +53,16 @@ const MailFolderLink: FunctionComponent<{
 }> = ({ link }) => {
   const pathname = useRouterState({ select: state => state.location.pathname })
   const isCollapsed = false
-  const isActive = pathname.startsWith(`/mail/${link.title.toLowerCase()}`)
+  const folderLink = `/mail/${link.title.toLowerCase()}`
+  const isActive = pathname.startsWith(folderLink)
   const variant = isActive ? "default" : "ghost"
 
   if (isCollapsed)
     return <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <Link
-          to="/mail/inbox"
+          // @ts-ignore
+          to={folderLink}
           className={cn(
             buttonVariants({ variant: variant, size: "icon" }),
             "h-9 w-9"
@@ -82,7 +84,8 @@ const MailFolderLink: FunctionComponent<{
 
   return (
     <Link
-      to="#"
+      // @ts-ignore
+      to={folderLink}
       className={cn(
         buttonVariants({ variant: variant, size: "sm" }),
         "justify-start"

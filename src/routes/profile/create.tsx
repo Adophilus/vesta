@@ -15,7 +15,10 @@ export const Route = createFileRoute('/profile/create')({
 
     if (profiles && profiles.length > 0)
       throw redirect({
-        to: '/mail/inbox'
+        to: '/mail/$mailFolder',
+        params: {
+          mailFolder: "inbox"
+        }
       })
   }
 })

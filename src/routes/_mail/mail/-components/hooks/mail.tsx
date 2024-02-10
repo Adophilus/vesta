@@ -1,6 +1,9 @@
 import { useAuthStore } from "@/lib/hooks/auth"
 import { useQuery } from "@tanstack/react-query"
 import MailService from "@/lib/services/mail"
+import { useRouterState } from "@tanstack/react-router"
+import { useState } from "react"
+import MailInterface from "@/lib/interfaces/mail"
 
 export function useGetMailsReceived() {
   const { profiles } = useAuthStore(store => ({
@@ -69,4 +72,9 @@ export function useGetMailSent(id: string) {
       return mail
     }
   })
+}
+
+export function useMailFolder() {
+  const [mailFolder, setMailFolder] = useState<MailInterface.MailFolder>("INBOX")
+  return { mailFolder, setMailFolder }
 }

@@ -157,7 +157,10 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 
       if (pathname === "/auth/sign-in") {
         navigate({
-          to: "/mail/inbox"
+          to: "/mail/$mailFolder",
+          params: {
+            mailFolder: "inbox"
+          }
         })
         return
       }

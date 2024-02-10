@@ -5,22 +5,36 @@ import { MailList } from "./-components/mail-list"
 import { SearchIcon } from "lucide-react"
 import { Input } from "@/components/shad/ui/input"
 
-import { Layout } from "./_inbox/-components/layout"
-import { useGetMailsReceived } from "./-components/hooks/mail"
+import { Layout } from "./_$mailFolder/-components/layout"
+import { useGetMailsReceived, useMailFolder } from "./-components/hooks/mail"
 import { FullLoader } from "./-components/full-loader"
+import { useEffect } from "react"
+import MailInterface from "@/lib/interfaces/mail"
 
-export const Route = createFileRoute('/_mail/mail/_inbox')({
+export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
   component: MailInboxLayout,
+  loader: ({ params }) => ({
+    mailFolder: params.mailFolder.toUpperCase() as unknown as MailInterface.MailFolder
+  })
 })
 
 function MailInboxLayout() {
+  const { mailFolder } = Route.useLoaderData()
+  console.log("mailFolder:", mailFolder)
+  const { setMailFolder } = useMailFolder()
   const { isLoading, isError, data: mails } = useGetMailsReceived()
+
+  useEffect(() => {
+    setMailFolder(mailFolder)
+  }, [])
 
   return (
     <Layout sidepanel={<Outlet />}>
       <Tabs defaultValue="all" className="grow flex flex-col">
         <div className="flex items-center px-4 py-2">
-          <h1 className="text-xl font-bold">Inbox</h1>
+          <h1 className="text-xl font-bold">
+            {mailFolder.charAt(0).toUpperCase() + mailFolder.slice(1)}
+          </h1>
           <TabsList className="ml-auto">
             <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">All mail</TabsTrigger>
             <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Unread</TabsTrigger>

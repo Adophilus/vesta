@@ -8,7 +8,7 @@ import MailInterface from "@/lib/interfaces/mail"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 
-export const Route = createFileRoute('/_mail/mail/_inbox/$mailReceivedId')({
+export const Route = createFileRoute('/_mail/mail/_$mailFolder/$mailReceivedId')({
   component: MailReceivedPage,
   loader: async ({ params: { mailReceivedId } }): Promise<Result<MailInterface.MailReceived.Fetch, string>> => {
     const mailReceived = await MailService.getReceivedMail(mailReceivedId)

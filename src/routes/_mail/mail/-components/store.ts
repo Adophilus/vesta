@@ -5,28 +5,18 @@ import { useAuthStore } from "@/lib/hooks/auth"
 import MailInterface from "@/lib/interfaces/mail"
 
 type MailStore = {
-  mails: MailInterface.MailReceived.Fetch[]
+  folder: MailInterface.MailFolder
 }
 
 export const useMailStore = create(
   combine(
     {
-      mails: [],
+      folder: "INBOX"
     } as MailStore,
     (set) => ({
-      load: async () => {
-        console.log("loading mails...")
-
-        const profile = useAuthStore.getState().profiles?.[0]
-        if (!profile) return
-
-        const mails = await MailService.getReceivedMails({
-          profile
-        })
-        console.log("loaded new mails...")
-
+      setFolder: (folder: MailInterface.MailFolder) => {
         set({
-          mails
+          folder
         })
       }
     })

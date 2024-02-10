@@ -13,7 +13,7 @@ import MailInterface from "@/lib/interfaces/mail"
 import MailService from "@/lib/services/mail"
 import { useEffect } from "react"
 import { useState } from "react"
-import { useGetMailSent } from "./hooks/mail"
+import { useGetMailSent, useMailFolder } from "./hooks/mail"
 import { InboxIcon } from "lucide-react"
 
 type State = {
@@ -87,19 +87,26 @@ const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }
 }
 
 export const MailList: FunctionComponent<{ mails: MailInterface.MailReceived.Fetch[] }> = ({ mails }) => {
-  if (mails.length === 0)
+  const { mailFolder } = useMailFolder()
+
+  const filteredMails = mails
+    .filter(mail => mail.data.folder === mailFolder)
+
+  console.log(filteredMails[0].data, mailFolder)
+
+  if (filteredMails.length === 0)
     return (
       <div className="grow gap-4 flex justify-center items-center flex-col">
         <InboxIcon className="h-12 w-12 mx-auto text-muted-foreground" />
         <header className="text-center text-muted-foreground">
-          Your inbox is empty
+          No mail found
         </header>
       </div>
     )
 
   return (
     <ScrollArea className="grow flex flex-col">
-      {mails.map((mail) => (
+      {filteredMails.map((mail) => (
         <div className="flex flex-col gap-2 p-4 pt-0">
           <MailListItem key={mail.key} mail={mail} />
         </div>

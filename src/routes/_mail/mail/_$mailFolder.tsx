@@ -10,6 +10,7 @@ import { useGetMailsReceived, useMailFolder } from "./-components/hooks/mail"
 import { FullLoader } from "./-components/full-loader"
 import { useEffect } from "react"
 import MailInterface from "@/lib/interfaces/mail"
+import { capitalize } from "lodash"
 
 export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
   component: MailInboxLayout,
@@ -20,20 +21,14 @@ export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
 
 function MailInboxLayout() {
   const { mailFolder } = Route.useLoaderData()
-  console.log("mailFolder:", mailFolder)
-  const { setMailFolder } = useMailFolder()
   const { isLoading, isError, data: mails } = useGetMailsReceived()
-
-  useEffect(() => {
-    setMailFolder(mailFolder)
-  }, [])
 
   return (
     <Layout sidepanel={<Outlet />}>
       <Tabs defaultValue="all" className="grow flex flex-col">
         <div className="flex items-center px-4 py-2">
           <h1 className="text-xl font-bold">
-            {mailFolder.charAt(0).toUpperCase() + mailFolder.slice(1)}
+            {capitalize(mailFolder)}
           </h1>
           <TabsList className="ml-auto">
             <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">All mail</TabsTrigger>

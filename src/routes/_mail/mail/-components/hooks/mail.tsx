@@ -4,6 +4,7 @@ import MailService from "@/lib/services/mail"
 import { useRouterState } from "@tanstack/react-router"
 import { useState } from "react"
 import MailInterface from "@/lib/interfaces/mail"
+import { combine } from "zustand/middleware"
 
 export function useGetMailsReceived() {
   const { profiles } = useAuthStore(store => ({
@@ -74,7 +75,16 @@ export function useGetMailSent(id: string) {
   })
 }
 
-export function useMailFolder() {
-  const [mailFolder, setMailFolder] = useState<MailInterface.MailFolder>("INBOX")
-  return { mailFolder, setMailFolder }
+export function useMailFolder(): MailInterface.MailFolder {
+  const pathname = useRouterState({ select: s => s.location.pathname })
+  const regex = /\/mail\/(.*)?(?:\/|)/
+  if (regex.test(pathname)) {
+    const match = regex.exec(pathname)
+    if (match) {
+      const mailFolder = match[1]
+      return mailFolder.toUpperCase() as unknown as MailInterface.MailFolder
+    }
+  }
+
+  return "INBOX"
 }

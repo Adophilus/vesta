@@ -87,12 +87,10 @@ const MailListItem: FunctionComponent<{ mail: MailInterface.MailReceived.Fetch }
 }
 
 export const MailList: FunctionComponent<{ mails: MailInterface.MailReceived.Fetch[] }> = ({ mails }) => {
-  const { mailFolder } = useMailFolder()
+  const mailFolder = useMailFolder()
 
   const filteredMails = mails
     .filter(mail => mail.data.folder === mailFolder)
-
-  console.log(filteredMails[0].data, mailFolder)
 
   if (filteredMails.length === 0)
     return (

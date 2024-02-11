@@ -16,15 +16,16 @@ import { useMailStore } from "./store";
 import { useGetMailsReceived, useInvalidate } from "./hooks/mail";
 import { useProfile } from "@/lib/hooks/profile";
 import { FileTile } from "./file-tile";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export function MailCompose() {
-  const [isOpen, setIsOpen] = useState(false)
+  const dialogCloseRef = useRef<HTMLButtonElement>(null)
 
   return (
     <div className="p-2">
-      <Dialog open={isOpen}>
-        <DialogTrigger asChild>
-          <Button onClick={() => setIsOpen(true)} className="w-full" variant="outline">
+      <Dialog>
+        <DialogTrigger className="w-full">
+          <Button className="flex items-center w-full" variant="outline">
             <PenIcon className="h-4 w-4 mr-2" />
             Compose
           </Button>
@@ -33,7 +34,8 @@ export function MailCompose() {
           <DialogHeader>
             <DialogTitle>Compose mail</DialogTitle>
           </DialogHeader>
-          <ComposeMailForm onSend={() => setIsOpen(false)} />
+          <ComposeMailForm onSend={() => dialogCloseRef.current?.click()} />
+          <DialogClose ref={dialogCloseRef} />
         </DialogContent>
       </Dialog>
     </div>

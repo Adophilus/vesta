@@ -4,7 +4,7 @@ import AssetInterface from "../interfaces/asset";
 
 namespace AssetService {
   const RAW_ASSET_COLLECTION_KEY = "raw-assets"
-  const COLLECTION_KEY = "raw-assets"
+  const COLLECTION_KEY = "assets"
 
   export const rawUpload = async (file: File) => {
     const asset = await uploadFile({

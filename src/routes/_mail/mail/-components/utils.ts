@@ -4,6 +4,7 @@ import MailInterface from "@/lib/interfaces/mail"
 import MailService from "@/lib/services/mail"
 import groupBy from "lodash/groupBy";
 import { toast } from "sonner"
+import UserProfileInterface from "@/lib/interfaces/user-profile";
 
 type InvalidateProps = {
   queryClient: QueryClient
@@ -166,4 +167,8 @@ export const groupMailsReceived = (mails: MailInterface.MailReceived.Fetch[]) =>
   }
 
   return groups
+}
+
+export const formatMailProfile = (sender: UserProfileInterface.UserProfile.Create) => {
+  return `${sender.firstName} ${sender.lastName} <${sender.email}>`
 }

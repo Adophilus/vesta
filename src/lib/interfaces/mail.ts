@@ -11,7 +11,7 @@ namespace MailInterface {
   export const mailFolders = ["INBOX", "DRAFT", "SENT", "SPAM", "TRASH", "ARCHIVE", "IMPORTANT"] as const
   export type MailFolder = typeof mailFolders[number]
 
-  export type Attachment = {
+  export type MailAttachment = {
     type: "file"
     url: string
   } | {
@@ -27,7 +27,7 @@ namespace MailInterface {
       cc: string[]
       bcc: string[]
       subject: string
-      attachments: Attachment[]
+      attachments: MailAttachment[]
       body: string
       sentAt: Date
     }

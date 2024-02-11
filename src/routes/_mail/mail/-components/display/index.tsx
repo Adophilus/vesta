@@ -48,6 +48,7 @@ import { useRouter } from "@tanstack/react-router"
 import * as utils from "../utils"
 import MailTooltip from "./tooltips"
 import { ReplyForm } from "./reply-form"
+import { MailBody } from "./body"
 
 export const MailDisplay: FunctionComponent<{
   mail: MailInterface.MailSent.Fetch
@@ -219,8 +220,8 @@ export const MailDisplay: FunctionComponent<{
           </div>
         </div>
         <Separator />
-        <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-          {mail.data.body}
+        <div className="flex flex-col grow whitespace-pre-wrap p-4 text-sm">
+          <MailBody mail={mail} />
         </div>
         <Separator className="mt-auto" />
         <div className="p-4">

@@ -14,8 +14,8 @@ export const Route = createRootRoute({
         <Outlet />
         <Toaster />
       </AuthProvider>
-      <TanStackRouterDevtools initialIsOpen={false} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/*<TanStackRouterDevtools initialIsOpen={false} />*/}
+      {/*<ReactQueryDevtools initialIsOpen={false} />*/}
     </QueryClientProvider>
   ),
 })

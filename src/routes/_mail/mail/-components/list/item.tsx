@@ -299,7 +299,7 @@ function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
         <div
           className={cn("text-xs font-medium", mailReceived.data.isRead && "text-muted-foreground")}
         >
-          {`${mail.data.sender.firstName} ${mail.data.sender.lastName}`} {`<${mail.data.sender.email}>`}
+          {utils.formatMailProfile(mailReceived.data.sender)}
         </div>
       </div>
       <div className="line-clamp-2 text-xs text-muted-foreground">

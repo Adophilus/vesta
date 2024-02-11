@@ -3,7 +3,7 @@ import { signIn as junoSignIn, signOut as junoSignOut, authSubscribe, User, init
 namespace AuthService {
   export const init = async () => {
     await initJuno({
-      satelliteId: "dwgre-oiaaa-aaaal-adsqq-cai",
+      satelliteId: import.meta.env.VITE_SATELLITE_ID as string,
       workers: {
         auth: true,
       },

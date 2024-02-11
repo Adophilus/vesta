@@ -1,30 +1,44 @@
-import { uploadFile, listAssets } from "@junobuild/core";
+import { uploadFile, setDoc, getDoc } from "@junobuild/core";
+import { ulid } from "ulidx";
+import AssetInterface from "../interfaces/asset";
 
 namespace AssetService {
-  const COLLECTION_KEY = "media"
+  const RAW_ASSET_COLLECTION_KEY = "raw-assets"
+  const COLLECTION_KEY = "raw-assets"
 
-  export const uploadAsset = async (file: File) => {
+  export const rawUpload = async (file: File) => {
     const asset = await uploadFile({
       data: file,
-      collection: COLLECTION_KEY,
+      collection: RAW_ASSET_COLLECTION_KEY,
     })
 
     return asset
   }
 
-  export const getAsset = async (key: string) => {
-    const assets = await listAssets({
+  export const upload = async (file: File) => {
+    const rawAsset = await AssetService.rawUpload(file)
+
+    const assetDoc = await setDoc<AssetInterface.Asset.Create>({
       collection: COLLECTION_KEY,
-      filter: {
-        matcher: {
-          key
+      doc: {
+        key: ulid(),
+        data: {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          downloadUrl: rawAsset.downloadUrl
         }
-      },
+      }
     })
 
-    const asset = assets.assets[0]
-    if (!asset)
-      return null
+    return assetDoc
+  }
+
+  export const getAsset = async (id: string) => {
+    const asset: AssetInterface.Asset.Fetch | undefined = await getDoc({
+      collection: COLLECTION_KEY,
+      key: id
+    })
 
     return asset
   }

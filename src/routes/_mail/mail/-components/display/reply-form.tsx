@@ -5,13 +5,14 @@ import { Switch } from "@/components/shad/ui/switch"
 import { Textarea } from "@/components/shad/ui/textarea"
 import MailInterface from "@/lib/interfaces/mail"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { HTMLAttributes, forwardRef, useState } from "react"
+import { FunctionComponent, HTMLAttributes, forwardRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import * as utils from "../utils"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { useProfile } from "@/lib/hooks/profile"
 import { Loader2Icon } from "lucide-react"
+import AssetService from "@/lib/services/asset"
 
 type ReplyFormProps = HTMLAttributes<HTMLTextAreaElement> & {
   mail: MailInterface.MailSent.Fetch
@@ -19,7 +20,8 @@ type ReplyFormProps = HTMLAttributes<HTMLTextAreaElement> & {
 }
 
 const formSchema = z.object({
-  body: z.string().min(1)
+  body: z.string().min(1),
+  files: z.array(z.instanceof(File))
 })
 
 type FormSchema = z.infer<typeof formSchema>
@@ -31,9 +33,12 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      body: ""
+      body: "",
+      files: []
     }
   })
+
+  const files = form.watch("files")
 
   const onSubmit = async (data: FormSchema) => {
     setIsSubmitting(true)
@@ -42,11 +47,24 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
       `Reply-To: ${mail.data.subject.slice(10)}` :
       `Reply-To: ${mail.data.subject}`
 
+    const { files, ...payload } = data
+
+    const attachments: MailInterface.MailAttachment[] = await Promise.all(
+      files.map(async (file) => {
+        const asset = await AssetService.upload(file)
+        return {
+          type: "asset",
+          assetId: asset.key
+        }
+      })
+    )
+
     await utils.sendMail({
-      ...data,
+      ...payload,
       cc: mail.data.cc,
       bcc: mail.data.bcc,
       recipientEmail: mailReceived.data.sender.email,
+      attachments,
       subject,
       sender: profile.data,
       organizationId: "",
@@ -75,6 +93,14 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
               </FormItem>
             )}
           />
+          <div className="grid grid-flow-col gap-4">
+            {files.map((file, index) => (
+              <FileTile
+                key={index}
+                file={file}
+              />
+            ))}
+          </div>
           <div className="flex items-center">
             <Label
               htmlFor="mute"
@@ -100,3 +126,17 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
     </Form>
   )
 })
+
+export const FileTile: FunctionComponent<{ file: File }> = ({ file }) => {
+  const url = URL.createObjectURL(file)
+
+  return (
+    <div
+      className="relative w-36 border-2 border-foreground rounded-md aspect-square">
+      <div className="w-full h-full absolute hover:bg-white-100/50" />
+      <img src={url}
+        className="w-full h-full"
+        alt={file.name} />
+    </div>
+  )
+}

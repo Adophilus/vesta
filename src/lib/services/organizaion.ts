@@ -11,7 +11,7 @@ namespace OrganizationService {
   }
 
   export const createOrganization = async ({ logo, ...payload }: CreateOrganizationPayload) => {
-    const uploadedLogo = await AssetService.uploadAsset(logo)
+    const uploadedLogo = await AssetService.rawUpload(logo)
 
     return setDoc<OrganizationInterface.Organization>({
       collection: COLLECTION_KEY,

@@ -261,6 +261,7 @@ type ItemBodyProps = {
   mailLink: string
   isSelected: boolean
 }
+
 function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
   return (
     <Link
@@ -282,7 +283,7 @@ function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
           <div
             className={cn(
               "ml-auto text-xs flex items-center gap-2",
-              isSelected
+              !mailReceived.data.isRead
                 ? "text-foreground"
                 : "text-muted-foreground"
             )}
@@ -298,7 +299,7 @@ function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
         <div
           className={cn("text-xs font-medium", mailReceived.data.isRead && "text-muted-foreground")}
         >
-          {mail.data.subject}
+          {`${mail.data.sender.firstName} ${mail.data.sender.lastName}`} {`<${mail.data.sender.email}>`}
         </div>
       </div>
       <div className="line-clamp-2 text-xs text-muted-foreground">

@@ -1,4 +1,5 @@
 import { Doc } from "@junobuild/core"
+import UserProfileInterface from "./user-profile"
 
 namespace MailInterface {
   export const mailTags = ["MEETING", "WORK", "IMPORTANT"] as const
@@ -13,7 +14,7 @@ namespace MailInterface {
   export namespace MailSent {
     export type Create = {
       organizationId: string
-      senderEmail: string
+      sender: UserProfileInterface.UserProfile.Create
       recipientEmail: string
       cc: string[]
       bcc: string[]
@@ -30,6 +31,7 @@ namespace MailInterface {
       folder: MailFolder
       mailId: string
       recipientEmail: string
+      sender: UserProfileInterface.UserProfile.Create
       replyToMailId?: {
         id: string
         subject: string

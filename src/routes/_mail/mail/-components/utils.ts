@@ -77,6 +77,26 @@ export const moveMailTo = async (mail: MailInterface.MailReceived.Fetch, folder:
   })
 }
 
+export const sendMail = async (payload: MailService.CreateMailPayload) => {
+  return new Promise((resolve, reject) => {
+    toast.promise(
+      MailService.sendMail(payload),
+      {
+        loading: "Sending mail",
+        success: () => {
+          const msg = "Mail sent successfully!"
+          resolve(msg)
+          return msg
+        },
+        error: (err) => {
+          console.log(err)
+          reject()
+          return "Sorry something went wrong"
+        }
+      })
+  })
+}
+
 export const muteMail = async (mail: MailInterface.MailReceived.Fetch) => {
   await MailService.muteReceivedMail(mail)
 }

@@ -16,7 +16,7 @@ export function Layout({ children }: { children: ReactNode }) {
             sizes
           )}`
         }}
-        className="grow items-stretch"
+        className="grow"
       >
         <ResizablePanel
           defaultSize={265}
@@ -30,7 +30,7 @@ export function Layout({ children }: { children: ReactNode }) {
               !isCollapsed
             )}`
           }}
-          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
+          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out", "flex flex-col grow")}
         >
           <Sidebar
             isCollapsed={isCollapsed}

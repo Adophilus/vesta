@@ -42,6 +42,16 @@ export const useAuthStore = create(
           await AuthService.signIn()
         }
 
+        const signOut = async () => {
+          await AuthService.signOut()
+          set({
+            isSignedIn: false,
+            profiles: null,
+            user: null,
+            activeProfile: null
+          })
+        }
+
         const setActiveProfile = async (index: number) => {
           const { profiles, isSignedIn } = get()
 
@@ -112,6 +122,7 @@ export const useAuthStore = create(
         return {
           init,
           signIn,
+          signOut,
           fetchProfiles,
           refetchProfiles,
           setActiveProfile

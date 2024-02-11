@@ -47,7 +47,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import * as utils from "../utils"
 import MailTooltip from "./tooltips"
-import { MailSenderProfile } from "./profile"
+import { ReplyForm } from "./reply-form"
 
 export const MailDisplay: FunctionComponent<{
   mail: MailInterface.MailSent.Fetch
@@ -198,14 +198,19 @@ export const MailDisplay: FunctionComponent<{
       <div className="flex flex-1 flex-col">
         <div className="flex items-start p-4">
           <div className="flex items-start gap-4 text-sm">
-            <MailSenderProfile mail={mail} />
+            <Avatar>
+              <AvatarImage alt={mail.data.sender.email} />
+              <AvatarFallback>
+                {`${mail.data.sender.firstName[0]}${mail.data.sender.lastName[0]}`}
+              </AvatarFallback>
+            </Avatar>
             <div className="grid gap-1">
               <div className="font-semibold">{mail.data.subject}</div>
               <div className="line-clamp-1 text-xs">
-                <span className="font-medium">From:</span> {mail.data.senderEmail}
+                <span className="font-medium">From:</span> {mail.data.sender.email}
               </div>
               <div className="line-clamp-1 text-xs">
-                <span className="font-medium">Reply-To:</span> {mail.data.senderEmail}
+                <span className="font-medium">Reply-To:</span> {mail.data.sender.email}
               </div>
             </div>
           </div>
@@ -219,31 +224,10 @@ export const MailDisplay: FunctionComponent<{
         </div>
         <Separator className="mt-auto" />
         <div className="p-4">
-          <form>
-            <div className="grid gap-4">
-              <Textarea
-                ref={replyToRef}
-                className="p-4"
-                placeholder={`Reply ${mail.data.senderEmail}`}
-              />
-              <div className="flex items-center">
-                <Label
-                  htmlFor="mute"
-                  className="flex items-center gap-2 text-xs font-normal"
-                >
-                  <Switch id="mute" aria-label="Mute thread" /> Mute this
-                  thread
-                </Label>
-                <Button
-                  onClick={(e) => e.preventDefault()}
-                  size="sm"
-                  className="ml-auto"
-                >
-                  Send
-                </Button>
-              </div>
-            </div>
-          </form>
+          <ReplyForm
+            mail={mail}
+            mailReceived={mailReceived}
+          />
         </div>
       </div>
     </div>

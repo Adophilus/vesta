@@ -78,9 +78,9 @@ export function useGetMailSent(id: string) {
 
 export function useGetMailSenderProfile(mail: MailInterface.MailSent.Fetch) {
   return useQuery({
-    queryKey: ['getMailSender', mail.data.senderEmail],
+    queryKey: ['getMailSender', mail.data.sender.email],
     queryFn: async () => {
-      const profile = await UserProfileService.getProfileByEmail(mail.data.senderEmail)
+      const profile = await UserProfileService.getProfileByEmail(mail.data.sender.email)
 
       if (!profile)
         throw new Error("Profile not found!")
@@ -111,6 +111,11 @@ export const useInvalidate = () => {
     getMailSent: (id: string) => {
       queryClient.invalidateQueries({
         queryKey: ['getMailSent', id],
+      })
+    },
+    getMailsSent: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['getMailSent'],
       })
     },
     getMailsReceived: () => {

@@ -1,13 +1,17 @@
 import { Separator } from "@/components/shad/ui/separator";
-import { AlertCircleIcon, ArchiveIcon, ArchiveXIcon, FileIcon, InboxIcon, LucideIcon, MessagesSquareIcon, SendIcon, ShoppingCartIcon, Trash2Icon, Users2Icon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { Nav } from "./nav";
 import { MailCompose } from "./mail-compose";
 import { AccountSwitcher } from "./account-switcher";
 import { cn } from "@/lib/shad/utils";
+import { Button } from "@/components/shad/ui/button";
+import { useAuthStore } from "@/lib/hooks/auth"
 
 export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed: (_: boolean) => void }) {
+  const signOut = useAuthStore(store => store.signOut)
+
   return (
-    <>
+    <div className="flex flex-col grow">
       <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
         <AccountSwitcher />
       </div>
@@ -18,41 +22,15 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed:
         isCollapsed={isCollapsed}
       />
       <Separator />
-      {/*<Nav
-        isCollapsed={isCollapsed}
-        links={[
-          {
-            title: "Social",
-            label: "972",
-            icon: Users2Icon,
-            variant: "ghost",
-          },
-          {
-            title: "Updates",
-            label: "342",
-            icon: AlertCircleIcon,
-            variant: "ghost",
-          },
-          {
-            title: "Forums",
-            label: "128",
-            icon: MessagesSquareIcon,
-            variant: "ghost",
-          },
-          {
-            title: "Shopping",
-            label: "8",
-            icon: ShoppingCartIcon,
-            variant: "ghost",
-          },
-          {
-            title: "Promotions",
-            label: "21",
-            icon: ArchiveIcon,
-            variant: "ghost",
-          },
-        ]}
-      />*/}
-    </>
+      <div className="flex p-2 flex-col grow justify-end">
+        <Button
+          onClick={() => signOut()}
+          variant="ghost"
+          className="flex justify-start gap-2">
+          <LogOutIcon className="w-4 h-4" />
+          Sign out
+        </Button>
+      </div>
+    </div >
   )
 }

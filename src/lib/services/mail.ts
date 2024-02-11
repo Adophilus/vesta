@@ -47,7 +47,7 @@ namespace MailService {
     return doc
   }
 
-  type CreateMailPayload = Omit<MailInterface.MailSent.Create, "sentAt">
+  export type CreateMailPayload = Omit<MailInterface.MailSent.Create, "sentAt">
 
   export const sendMail = async (payload: CreateMailPayload): Promise<MailInterface.MailSent.Fetch> => {
     const mail = await setDoc<MailInterface.MailSent.Create>({
@@ -70,6 +70,7 @@ namespace MailService {
           data: {
             folder: "INBOX",
             mailId: mail.key,
+            sender: payload.sender,
             recipientEmail: recipient,
             isRead: false,
             isMuted: false,

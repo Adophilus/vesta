@@ -6,13 +6,14 @@ import { Loader2Icon, PenIcon, SendHorizonalIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import * as utils from "./utils"
 import MailService from "@/lib/services/mail";
 import { Textarea } from "@/components/shad/ui/textarea";
 import { FunctionComponent, useState } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/lib/hooks/auth";
 import { useMailStore } from "./store";
-import { useGetMailsReceived } from "./hooks/mail";
+import { useGetMailsReceived, useInvalidate } from "./hooks/mail";
 
 export function MailCompose() {
   const [isOpen, setIsOpen] = useState(false)
@@ -55,7 +56,7 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     activeProfileIndex: store.activeProfile
   }))
 
-  const { refetch } = useGetMailsReceived()
+  const invalidate = useInvalidate()
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -75,17 +76,17 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
   const onSubmit = async (data: FormSchema) => {
     setIsSending(true)
 
-    await MailService.sendMail({
+    await utils.sendMail({
       ...data,
-      senderEmail: profile.data.email,
+      sender: profile.data,
       organizationId: ""
     })
+      .then(() => setIsSending(false))
+      .catch(() => setIsSending(false))
 
-    toast.success("Mail sent successfully!")
+    invalidate.getMailsReceived()
+    invalidate.getMailsSent()
 
-    refetch()
-
-    setIsSending(false)
     onSend()
   }
 

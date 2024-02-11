@@ -9,7 +9,11 @@ namespace AuthService {
       workers: {
         auth: true,
       },
-    });
+    })
+      // .catch(err => {
+      //   console.log(err)
+      //   alert("Please check your internet connection and try again")
+      // });
   }
 
   export const signIn = async () => await junoSignIn()

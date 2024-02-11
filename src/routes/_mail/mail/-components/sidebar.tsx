@@ -6,6 +6,7 @@ import { AccountSwitcher } from "./account-switcher";
 import { cn } from "@/lib/shad/utils";
 import { Button } from "@/components/shad/ui/button";
 import { useAuthStore } from "@/lib/hooks/auth"
+import { Link } from "@tanstack/react-router"
 
 export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed: (_: boolean) => void }) {
   const signOut = useAuthStore(store => store.signOut)
@@ -23,6 +24,18 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed:
       />
       <Separator />
       <div className="flex p-2 flex-col grow justify-end">
+        <Link
+          to="/workspace"
+        >
+          <Button
+            onClick={() => signOut()}
+            variant="ghost"
+            className="flex justify-start gap-2"
+          >
+            <LogOutIcon className="w-4 h-4" />
+            Workspace
+          </Button>
+        </Link>
         <Button
           onClick={() => signOut()}
           variant="ghost"

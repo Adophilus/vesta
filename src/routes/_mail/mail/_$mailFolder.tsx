@@ -11,6 +11,7 @@ import { FullLoader } from "./-components/full-loader"
 import { useEffect, useState } from "react"
 import MailInterface from "@/lib/interfaces/mail"
 import { capitalize } from "lodash"
+import { Search } from "./-components/search"
 
 export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
   component: MailInboxLayout,
@@ -63,14 +64,7 @@ function MailInboxLayout() {
           )}
         </div>
         <Separator />
-        <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <form>
-            <div className="relative">
-              <SearchIcon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search" className="pl-8" />
-            </div>
-          </form>
-        </div>
+        <Search />
         <div
           className="m-0 grow flex flex-col"
         >

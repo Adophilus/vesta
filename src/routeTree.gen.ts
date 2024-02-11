@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WorkspaceImport } from './routes/workspace'
 import { Route as MailImport } from './routes/_mail'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileCreateImport } from './routes/profile/create'
@@ -21,6 +22,11 @@ import { Route as MailMailMailFolderImport } from './routes/_mail/mail/_$mailFol
 import { Route as MailMailMailFolderMailReceivedIdImport } from './routes/_mail/mail/_$mailFolder/$mailReceivedId'
 
 // Create/Update Routes
+
+const WorkspaceRoute = WorkspaceImport.update({
+  path: '/workspace',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const MailRoute = MailImport.update({
   id: '/_mail',
@@ -75,6 +81,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MailImport
       parentRoute: typeof rootRoute
     }
+    '/workspace': {
+      preLoaderRoute: typeof WorkspaceImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/sign-in': {
       preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
@@ -111,6 +121,7 @@ export const routeTree = rootRoute.addChildren([
       MailMailMailFolderMailReceivedIdRoute,
     ]),
   ]),
+  WorkspaceRoute,
   AuthSignInRoute,
   LegalPrivacyRoute,
   LegalTermsRoute,

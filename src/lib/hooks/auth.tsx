@@ -108,6 +108,8 @@ export const useAuthStore = create(
               .then(profiles => profiles
                 .map(profile => serializeJunoDoc(profile)))
 
+            console.log(profiles)
+
             set({
               user: processedUser,
               profiles,

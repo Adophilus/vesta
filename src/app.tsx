@@ -19,7 +19,7 @@ declare module '@tanstack/react-router' {
 
 
 (async () => {
-  await AuthService.init()
+  // await AuthService.init()
 
   // Render the app
   const rootElement = document.getElementById('root')!

@@ -8,7 +8,7 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
     './index.html'
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -26,7 +26,8 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          // DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#7888ff",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {

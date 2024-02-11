@@ -2,7 +2,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { useGetMailSent } from "../-components/hooks/mail"
 import MailService from "@/lib/services/mail"
 import { AlertCircleIcon, Loader2Icon } from "lucide-react"
-import { MailDisplay } from "../-components/mail-display"
+import { MailDisplay } from "../-components/display"
 import { Result } from "true-myth"
 import MailInterface from "@/lib/interfaces/mail"
 import { useQueryClient } from "@tanstack/react-query"
@@ -66,7 +66,8 @@ function MailReceivedPage() {
 
   return (
     <MailDisplay
-      mail={mail}
+      mail={mail!}
+      mailReceived={mailReceived}
     />
   )
 }

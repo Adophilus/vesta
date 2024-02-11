@@ -13,17 +13,19 @@ import { FunctionComponent } from "react"
 export const AccountSwitcher: FunctionComponent = () => {
   const {
     profiles,
-    isSignedIn,
     setActiveProfile,
     activeProfile: activeProfileIndex
-  } = useAuthStore()
+  } = useAuthStore(store => ({
+    profiles: store.profiles,
+    activeProfile: store.activeProfile,
+    setActiveProfile: store.setActiveProfile
+  }))
 
   const isCollapsed = false
 
-  if (!isSignedIn) return null
+  if (!profiles || profiles.length === 0) return null
 
-  console.log("profiles(account-switcher):", profiles)
-  const activeProfile = profiles![activeProfileIndex!]
+  const activeProfile = profiles[activeProfileIndex!]
   const profileFullName = `${activeProfile.data.firstName} ${activeProfile.data.lastName}`
 
   return (

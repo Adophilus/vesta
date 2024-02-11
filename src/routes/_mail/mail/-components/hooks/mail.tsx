@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/lib/hooks/auth"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import MailService from "@/lib/services/mail"
 import { useRouterState } from "@tanstack/react-router"
 import { useState } from "react"
@@ -77,7 +77,7 @@ export function useGetMailSent(id: string) {
 
 export function useMailFolder(): MailInterface.MailFolder {
   const pathname = useRouterState({ select: s => s.location.pathname })
-  const regex = /\/mail\/(.*)?(?:\/|)/
+  const regex = /\/mail\/(\w+)/
   if (regex.test(pathname)) {
     const match = regex.exec(pathname)
     if (match) {
@@ -87,4 +87,26 @@ export function useMailFolder(): MailInterface.MailFolder {
   }
 
   return "INBOX"
+}
+
+export const useInvalidate = () => {
+  const queryClient = useQueryClient()
+
+  return {
+    getMailSent: (id: string) => {
+      queryClient.invalidateQueries({
+        queryKey: ['getMailSent', id],
+      })
+    },
+    getMailsReceived: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getMailsReceived"]
+      })
+    },
+    getMailReceived: (id: string) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getMailReceived", id]
+      })
+    }
+  }
 }

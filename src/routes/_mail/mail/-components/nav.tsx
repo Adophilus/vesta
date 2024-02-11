@@ -1,17 +1,17 @@
 import { Link, useRouterState } from "@tanstack/react-router"
 
 import { useGetMailsReceived } from "./hooks/mail";
-import MailInterface from "@/lib/interfaces/mail";
-import groupBy from "lodash/groupBy";
 import { cn } from "@/lib/shad/utils"
 import { buttonVariants } from "@/components/shad/ui/button"
-import { AlertCircleIcon, ArchiveIcon, ArchiveXIcon, FileIcon, InboxIcon, LucideIcon, MessagesSquareIcon, SendIcon, ShoppingCartIcon, Trash2Icon, Users2Icon } from "lucide-react";
+import { ArchiveIcon, ArchiveXIcon, FileIcon, InboxIcon, LucideIcon, MessagesSquareIcon, SendIcon, ShoppingCartIcon, StarIcon, Trash2Icon, Users2Icon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/shad/ui/tooltip"
 import { FunctionComponent } from "react";
+import * as utils from "./utils"
+import MailInterface from "@/lib/interfaces/mail";
 
 interface NavProps {
   isCollapsed: boolean
@@ -31,17 +31,21 @@ const folders = [
     icon: SendIcon,
   },
   {
-    title: "JUNK",
+    title: "SPAM",
     icon: ArchiveXIcon,
+  },
+  {
+    title: "ARCHIVE",
+    icon: ArchiveIcon
+  },
+  {
+    title: "IMPORTANT",
+    icon: StarIcon
   },
   {
     title: "TRASH",
     icon: Trash2Icon
   },
-  {
-    title: "ARCHIVE",
-    icon: ArchiveIcon
-  }
 ]
 
 const MailFolderLink: FunctionComponent<{
@@ -58,29 +62,31 @@ const MailFolderLink: FunctionComponent<{
   const variant = isActive ? "default" : "ghost"
 
   if (isCollapsed)
-    return <Tooltip delayDuration={0}>
-      <TooltipTrigger asChild>
-        <Link
-          // @ts-ignore
-          to={folderLink}
-          className={cn(
-            buttonVariants({ variant: variant, size: "icon" }),
-            "h-9 w-9"
+    return (
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <Link
+            // @ts-ignore
+            to={folderLink}
+            className={cn(
+              buttonVariants({ variant: variant, size: "icon" }),
+              "h-9 w-9"
+            )}
+          >
+            <link.icon className="h-4 w-4" />
+            <span className="sr-only">{link.title}</span>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="flex items-center gap-4">
+          {link.title}
+          {link.label && (
+            <span className="ml-auto text-muted-foreground">
+              {link.label}
+            </span>
           )}
-        >
-          <link.icon className="h-4 w-4" />
-          <span className="sr-only">{link.title}</span>
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent side="right" className="flex items-center gap-4">
-        {link.title}
-        {link.label && (
-          <span className="ml-auto text-muted-foreground">
-            {link.label}
-          </span>
-        )}
-      </TooltipContent>
-    </Tooltip>
+        </TooltipContent>
+      </Tooltip>
+    )
 
   return (
     <Link
@@ -112,10 +118,10 @@ const MailFolderLink: FunctionComponent<{
 export function Nav({ isCollapsed }: NavProps) {
   const { data } = useGetMailsReceived()
 
-  const count = groupBy(data ?? [], 'data.folder')
+  const count = utils.groupMailsReceived(data ?? [])
 
   const links = folders.map(folder => {
-    let folderCount: string | number = count[folder.title]?.length ?? 0
+    let folderCount: string | number = count[folder.title as unknown as MailInterface.MailFolder]?.length ?? 0
 
     if (folderCount === 0)
       folderCount = ""

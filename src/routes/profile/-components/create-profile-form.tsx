@@ -30,13 +30,13 @@ export function CreateProfileForm() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { user, profiles, refetchProfiles } = useAuthStore(store => ({
-    user: store.user!,
-    profiles: store.profiles!,
+    user: store.user,
+    profiles: store.profiles,
     refetchProfiles: store.refetchProfiles
   }))
 
   useEffect(() => {
-    if (profiles.length > 0)
+    if (profiles && profiles.length > 0)
       navigate({
         to: "/mail/$mailFolder",
         params: {
@@ -52,7 +52,11 @@ export function CreateProfileForm() {
     }
   })
 
+  if (!user) return null
+
   async function onSubmit(data: FormSchema) {
+    if (!user) return null
+
     setIsSubmitting(true)
 
     await UserProfileService.createProfile({

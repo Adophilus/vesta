@@ -5,5 +5,5 @@ export const Route = createFileRoute('/')({
 })
 
 function IndexPage() {
-  return null
+  return "This is the index page"
 }

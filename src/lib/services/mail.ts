@@ -1,4 +1,4 @@
-import { setDoc, listDocs, ListResults, Doc, User, getDoc } from "@junobuild/core";
+import { setDoc, listDocs, deleteDoc, ListResults, Doc, User, getDoc } from "@junobuild/core";
 import { ulid } from "ulidx";
 import MailInterface from "../interfaces/mail";
 import UserProfileInterface from "../interfaces/user-profile";
@@ -92,6 +92,80 @@ namespace MailService {
         data: {
           ...mail.data,
           isRead: true
+        }
+      }
+    })
+  }
+
+  export const moveReceivedMailToFolder = async (mail: MailInterface.MailReceived.Fetch, folder: MailInterface.MailFolder) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          folder,
+        }
+      }
+    })
+  }
+
+  export const removeReceivedMailFromFolder = async (mail: MailInterface.MailReceived.Fetch, folder: MailInterface.MailFolder) => {
+    await deleteDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: mail
+    })
+  }
+
+
+  export const muteReceivedMail = async (mail: MailInterface.MailReceived.Fetch) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          isMuted: true
+        }
+      }
+    })
+  }
+
+  export const unMuteReceivedMail = async (mail: MailInterface.MailReceived.Fetch) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          isMuted: false
+        }
+      }
+    })
+  }
+
+
+  export const starReceivedMail = async (mail: MailInterface.MailReceived.Fetch) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          isStarred: true
+        }
+      }
+    })
+  }
+
+  export const unStarReceivedMail = async (mail: MailInterface.MailReceived.Fetch) => {
+    await setDoc<MailInterface.MailReceived.Create>({
+      collection: MAILS_RECEIVED_COLLECTION_KEY,
+      doc: {
+        ...mail,
+        data: {
+          ...mail.data,
+          isStarred: false
         }
       }
     })

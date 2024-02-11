@@ -7,7 +7,7 @@ namespace MailInterface {
   export const mailLabels = []
   export type MailLabel = typeof mailLabels[number]
 
-  export const mailFolders = ["INBOX", "DRAFT", "SENT", "JUNK", "TRASH", "ARCHIVE"] as const
+  export const mailFolders = ["INBOX", "DRAFT", "SENT", "SPAM", "TRASH", "ARCHIVE", "IMPORTANT"] as const
   export type MailFolder = typeof mailFolders[number]
 
   export namespace MailSent {

@@ -79,6 +79,7 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     await utils.sendMail({
       ...data,
       sender: profile.data,
+      attachments: [],
       organizationId: ""
     })
       .then(() => setIsSending(false))

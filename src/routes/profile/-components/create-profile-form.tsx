@@ -21,7 +21,7 @@ const formSchema = z.object({
 })
 
 const emailExtensions = [
-  "myjunoapp.com"
+  "jmail.com"
 ]
 
 type FormSchema = z.infer<typeof formSchema>

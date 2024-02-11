@@ -64,7 +64,7 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     defaultValues: {
       files: [],
       subject: "Test",
-      recipientEmail: "adophilus@myjunoapp.com",
+      recipientEmail: "adophilus@jmail.com",
       body: "This is a test email",
       cc: [],
       bcc: []

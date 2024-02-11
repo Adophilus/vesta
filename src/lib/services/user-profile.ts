@@ -1,4 +1,4 @@
-import { ListResults, listDocs, setDoc } from "@junobuild/core"
+import { ListResults, getDoc, listDocs, setDoc } from "@junobuild/core"
 import UserProfileInterface from "../interfaces/user-profile"
 import { ulid } from "ulidx"
 
@@ -12,7 +12,7 @@ namespace UserProfileService {
       collection: COLLECTION_KEY,
       doc: {
         key: ulid(),
-        description: `<|userId:${payload.userId}|><|organizationId:${payload.organizationId}|>`,
+        description: `<|email:${payload.email}|><|userId:${payload.userId}|><|organizationId:${payload.organizationId}|>`,
         data: payload
       }
     })
@@ -31,6 +31,20 @@ namespace UserProfileService {
     })
 
     return profiles.items
+  }
+
+  export const getProfileByEmail = async (email: string): Promise<UserProfileInterface.UserProfile.Fetch | undefined> => {
+    const profiles: ListResults<UserProfileInterface.UserProfile.Fetch> = await listDocs({
+      collection: COLLECTION_KEY,
+      filter: {
+        matcher: {
+          description: `<|email:${email}|>`
+        }
+      }
+    })
+    console.log(profiles)
+
+    return profiles.items[0]
   }
 }
 

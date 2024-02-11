@@ -47,6 +47,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import * as utils from "../utils"
 import MailTooltip from "./tooltips"
+import { MailSenderProfile } from "./profile"
 
 export const MailDisplay: FunctionComponent<{
   mail: MailInterface.MailSent.Fetch
@@ -197,12 +198,7 @@ export const MailDisplay: FunctionComponent<{
       <div className="flex flex-1 flex-col">
         <div className="flex items-start p-4">
           <div className="flex items-start gap-4 text-sm">
-            <Avatar>
-              <AvatarImage alt={mail.data.senderEmail} />
-              <AvatarFallback>
-                {mail.data.senderEmail}
-              </AvatarFallback>
-            </Avatar>
+            <MailSenderProfile mail={mail} />
             <div className="grid gap-1">
               <div className="font-semibold">{mail.data.subject}</div>
               <div className="line-clamp-1 text-xs">

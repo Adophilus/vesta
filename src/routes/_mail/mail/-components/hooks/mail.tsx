@@ -5,6 +5,7 @@ import { useRouterState } from "@tanstack/react-router"
 import { useState } from "react"
 import MailInterface from "@/lib/interfaces/mail"
 import { combine } from "zustand/middleware"
+import UserProfileService from "@/lib/services/user-profile"
 
 export function useGetMailsReceived() {
   const { profiles } = useAuthStore(store => ({
@@ -71,6 +72,20 @@ export function useGetMailSent(id: string) {
         throw new Error("Mail not found!")
 
       return mail
+    }
+  })
+}
+
+export function useGetMailSenderProfile(mail: MailInterface.MailSent.Fetch) {
+  return useQuery({
+    queryKey: ['getMailSender', mail.data.senderEmail],
+    queryFn: async () => {
+      const profile = await UserProfileService.getProfileByEmail(mail.data.senderEmail)
+
+      if (!profile)
+        throw new Error("Profile not found!")
+
+      return profile
     }
   })
 }

@@ -2,18 +2,20 @@ import { Button } from "@/components/shad/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/shad/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/shad/ui/form";
 import { Input } from "@/components/shad/ui/input";
-import { Loader2Icon, PenIcon, SendHorizonalIcon } from "lucide-react";
+import { Loader2Icon, PaperclipIcon, PenIcon, SendHorizonalIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as utils from "./utils"
 import MailService from "@/lib/services/mail";
 import { Textarea } from "@/components/shad/ui/textarea";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/lib/hooks/auth";
 import { useMailStore } from "./store";
 import { useGetMailsReceived, useInvalidate } from "./hooks/mail";
+import { useProfile } from "@/lib/hooks/profile";
+import { FileTile } from "./file-tile";
 
 export function MailCompose() {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,7 +29,7 @@ export function MailCompose() {
             Compose
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px] p-4">
           <DialogHeader>
             <DialogTitle>Compose mail</DialogTitle>
           </DialogHeader>
@@ -39,6 +41,7 @@ export function MailCompose() {
 }
 
 const formSchema = z.object({
+  files: z.array(z.instanceof(File)),
   recipientEmail: z.string().email(),
   subject: z.string(),
   cc: z.array(z.string().email()),
@@ -50,17 +53,16 @@ type FormSchema = z.infer<typeof formSchema>
 
 const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) => {
   const [isSending, setIsSending] = useState(false)
-  const { isSignedIn, profiles, activeProfileIndex } = useAuthStore(store => ({
-    isSignedIn: store.isSignedIn,
-    profiles: store.profiles,
-    activeProfileIndex: store.activeProfile
-  }))
+  const profile = useProfile()
 
   const invalidate = useInvalidate()
+
+  const fileRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      files: [],
       subject: "Test",
       recipientEmail: "adophilus@myjunoapp.com",
       body: "This is a test email",
@@ -69,17 +71,19 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     }
   })
 
-  if (!isSignedIn || activeProfileIndex === null) return null
-  const profile = profiles![activeProfileIndex]
-  if (!profile) return null
+  const files = form.watch("files")
 
   const onSubmit = async (data: FormSchema) => {
     setIsSending(true)
 
+    const { files, ...payload } = data
+
+    const attachments = await utils.uploadAssets(files)
+
     await utils.sendMail({
-      ...data,
+      ...payload,
       sender: profile.data,
-      attachments: [],
+      attachments,
       organizationId: ""
     })
       .then(() => setIsSending(false))
@@ -140,19 +144,59 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
               </FormItem>
             )}
           />
+          <div className="space-x-4">
+            {files.map((file, index) => (
+              <FileTile
+                key={index}
+                file={file}
+                onRemove={() => {
+                  const newFiles = [
+                    ...files.slice(0, index)
+                      .concat(files.slice(index + 1))
+                  ]
+                  form.setValue("files", newFiles)
+                }}
+              />
+            ))}
+          </div>
         </div>
         <DialogFooter>
-          <Button
-            disabled={isSending}
-            type="submit"
-          >
-            {isSending ? <Loader2Icon className="w-4 h-4 animate-spin" /> : (
-              <>
-                Send
-                <SendHorizonalIcon className="w-4 h-4 ml-2" />
-              </>
-            )}
-          </Button>
+          <div className="flex justify-between grow">
+            <div>
+              <input
+                type="file"
+                multiple
+                ref={fileRef}
+                className="absolute invisible"
+                onChange={e => {
+                  const newFiles = [...files]
+                  for (const file of e.target.files ?? []) {
+                    newFiles.push(file)
+                  }
+
+                  form.setValue("files", newFiles)
+                }}
+              />
+              <Button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="gap-2">
+                <PaperclipIcon className="w-4 h-4" />
+                Add
+              </Button>
+            </div>
+            <Button
+              disabled={isSending}
+              type="submit"
+            >
+              {isSending ? <Loader2Icon className="w-4 h-4 animate-spin" /> : (
+                <>
+                  Send
+                  <SendHorizonalIcon className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          </div>
         </DialogFooter>
       </form>
     </Form>

@@ -5,6 +5,7 @@ import MailService from "@/lib/services/mail"
 import groupBy from "lodash/groupBy";
 import { toast } from "sonner"
 import UserProfileInterface from "@/lib/interfaces/user-profile";
+import AssetService from "@/lib/services/asset";
 
 type InvalidateProps = {
   queryClient: QueryClient
@@ -171,4 +172,26 @@ export const groupMailsReceived = (mails: MailInterface.MailReceived.Fetch[]) =>
 
 export const formatMailProfile = (sender: UserProfileInterface.UserProfile.Create) => {
   return `${sender.firstName} ${sender.lastName} <${sender.email}>`
+}
+
+export const uploadAssets = async (files: File[]) => {
+  return new Promise<MailInterface.MailAttachment[]>((resolve, reject) => {
+    toast.promise(
+      Promise.all(files.map(file => AssetService.upload(file))),
+      {
+        loading: "Uploading files",
+        success: (assets) => {
+          resolve(assets.map(asset => ({
+            type: "asset",
+            assetId: asset.key
+          })))
+
+          return "Uploaded"
+        },
+        error: () => {
+          reject()
+          return "Upload failed"
+        }
+      })
+  })
 }

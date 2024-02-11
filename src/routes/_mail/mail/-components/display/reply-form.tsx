@@ -15,6 +15,7 @@ import { Loader2Icon, PaperclipIcon, XIcon } from "lucide-react"
 import AssetService from "@/lib/services/asset"
 import { useRouter } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
+import { FileTile } from "../file-tile"
 
 type ReplyFormProps = HTMLAttributes<HTMLTextAreaElement> & {
   mail: MailInterface.MailSent.Fetch
@@ -64,15 +65,7 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
 
     const { files, ...payload } = data
 
-    const attachments: MailInterface.MailAttachment[] = await Promise.all(
-      files.map(async (file) => {
-        const asset = await AssetService.upload(file)
-        return {
-          type: "asset",
-          assetId: asset.key
-        }
-      })
-    )
+    const attachments = await utils.uploadAssets(files)
 
     await utils.sendMail({
       ...payload,
@@ -166,24 +159,3 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
     </Form>
   )
 })
-
-export const FileTile: FunctionComponent<{ file: File, onRemove: () => void }> = ({ file, onRemove }) => {
-  const url = URL.createObjectURL(file)
-
-  return (
-    <div
-      className="relative inline-flex group w-24 border-[3px] border-foreground rounded-lg aspect-square">
-      <button
-        type="button"
-        onClick={() => onRemove()}
-        className="z-10 bg-white rounded-full absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 p-1 border-[3px] border-foreground"
-      >
-        <XIcon className="w-4 h-4 stroke-[3px]" />
-      </button>
-      <div className="w-full h-full absolute group:hover:bg-white-100/50" />
-      <img src={url}
-        className="rounded-md w-full h-full object-cover"
-        alt={file.name} />
-    </div>
-  )
-}

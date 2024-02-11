@@ -6,7 +6,6 @@ import "./styles/globals.css"
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import AuthService from './lib/services/auth'
-import { AuthProvider } from './lib/hooks/auth'
 
 // Create a new router instance
 const router = createRouter({ routeTree })
@@ -26,9 +25,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
     </StrictMode>,
   )
 }

@@ -25,7 +25,8 @@ jobs:
 
       - name: Build
         run: pnpm build
-
+        env:
+          JUNO_SATELLITE_ID: "dwgre-oiaaa-aaaal-adsqq-cai"
       - name: Deploy to Juno
         uses: junobuild/juno-action@main
         with:

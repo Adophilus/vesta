@@ -234,21 +234,27 @@ const ItemWithContextMenu: FunctionComponent<{
             </ContextMenuSubContent>
           </ContextMenuSub>
         )}
-        <ContextMenuSeparator />
-        {mailReceived.data.folder === "TRASH" ? (
-          <ContextMenuItem
-            onClick={() => deleteMail()}
-            className="gap-2 text-red-700">
-            <Trash2Icon className="h-4 w-4" />
-            Delete permanently
-          </ContextMenuItem>
-        ) : (
-          <ContextMenuItem
-            onClick={() => moveMailTo("TRASH")}
-            className="gap-2 text-red-700">
-            <Trash2Icon className="h-4 w-4" />
-            Trash
-          </ContextMenuItem>
+        {mailReceived.data.folder === "TRASH" && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuItem
+              onClick={() => deleteMail()}
+              className="gap-2 text-red-700">
+              <Trash2Icon className="h-4 w-4" />
+              Delete permanently
+            </ContextMenuItem>
+          </>
+        )}
+        {["INBOX", "SPAM", "ARCHIVE", "IMPORTANT"].includes(mailReceived.data.folder) && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuItem
+              onClick={() => moveMailTo("TRASH")}
+              className="gap-2 text-red-700">
+              <Trash2Icon className="h-4 w-4" />
+              Trash
+            </ContextMenuItem>
+          </>
         )}
       </ContextMenuContent>
     </ContextMenu >

@@ -8,7 +8,9 @@ import path from "path"
 export default defineConfig({
   plugins: [
     TanStackRouterVite(),
-    nodePolyfills(),
+    nodePolyfills({
+      exclude: ["crypto"]
+    }),
     react(),
   ],
   resolve: {

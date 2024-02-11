@@ -1,5 +1,5 @@
 import { Separator } from "@/components/shad/ui/separator";
-import { LogOutIcon } from "lucide-react";
+import { ComponentIcon, LogOutIcon } from "lucide-react";
 import { Nav } from "./nav";
 import { MailCompose } from "./mail-compose";
 import { AccountSwitcher } from "./account-switcher";
@@ -23,16 +23,16 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed:
         isCollapsed={isCollapsed}
       />
       <Separator />
-      <div className="flex p-2 flex-col grow justify-end">
+      <div className="flex p-2 gap-2 flex-col grow justify-end">
         <Link
           to="/workspace"
+          className="flex w-full"
         >
           <Button
-            onClick={() => signOut()}
             variant="ghost"
-            className="flex justify-start gap-2"
+            className="flex w-full justify-start gap-2"
           >
-            <LogOutIcon className="w-4 h-4" />
+            <ComponentIcon className="w-4 h-4" />
             Workspace
           </Button>
         </Link>

@@ -84,13 +84,14 @@ namespace MailService {
     });
 
     for (const recipient of [payload.recipientEmail, payload.sender.email, ...payload.cc, ...payload.bcc]) {
+      const folder = recipient === payload.sender.email ? "SENT" : "INBOX"
       await setDoc<MailInterface.MailReceived.Create>({
         collection: MAILS_RECEIVED_COLLECTION_KEY,
         doc: {
           key: ulid(),
           description: `<|recipientEmail:${recipient}|>`,
           data: {
-            folder: "INBOX",
+            folder,
             mailId: mail.key,
             sender: payload.sender,
             recipientEmail: recipient,

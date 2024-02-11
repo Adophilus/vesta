@@ -8,16 +8,16 @@ import { Crypto } from "@peculiar/webcrypto"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    nodePolyfills(),
     TanStackRouterVite(),
+    nodePolyfills(),
     react(),
   ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      global: {
-        crpto: new Crypto()
-      }
+      // global: {
+      //   crpto: new Crypto()
+      // }
     },
   }
 })

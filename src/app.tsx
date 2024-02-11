@@ -6,6 +6,7 @@ import "./styles/globals.css"
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import AuthService from './lib/services/auth'
+import { Crypto } from "@peculiar/webcrypto"
 
 // Create a new router instance
 const router = createRouter({ routeTree })
@@ -19,6 +20,10 @@ declare module '@tanstack/react-router' {
 
 
 (async () => {
+  Object.defineProperty(globalThis, "crypto", {
+    value: new Crypto()
+  })
+
   await AuthService.init()
 
   // Render the app

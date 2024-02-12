@@ -1,10 +1,29 @@
 import { ButtonProps } from "@/components/shad/ui/button";
-import { forwardRef } from "react";
+import { cn } from "@/lib/shad/utils";
+import { forwardRef, useRef } from "react";
+import { motion } from "framer-motion"
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, ...props }) => (
-    <button type="button" {...props}>
-      {children}
-    </button>
-  )
-)
+  ({ children, className }, ref) => {
+    const classes = "border-[3px] border-black px-4 py-2 shadow-[6px_4px_0px_1px_rgb(0,0,0)] shadow-primary focus:outline-none hover:border-primary transition-all duration-250"
+
+    return (
+      <motion.button
+        className={cn(classes, className)}
+        whileTap={{
+          boxShadow: "0px 0px 0px 0px",
+          backgroundColor: "#7888ff",
+          color: "white",
+          x: 6,
+          y: 4,
+          transition: {
+            ease: "linear",
+            duration: 0.25,
+          }
+        }}
+        ref={ref}
+      >
+        {children}
+      </motion.button>
+    )
+  })

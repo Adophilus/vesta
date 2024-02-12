@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ children, className }, ref) => {
-    const classes = "bg-white border-[3px] border-black px-4 py-2 shadow-[6px_4px_0px_1px_rgb(0,0,0)] shadow-primary focus:outline-none hover:border-primary transition-all duration-250"
+    const classes = "border-[3px] border-black px-4 py-2 shadow-[6px_4px_0px_1px_rgb(0,0,0)] shadow-primary focus:outline-none hover:border-primary transition-all duration-250"
 
     return (
       <motion.button

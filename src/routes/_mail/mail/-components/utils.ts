@@ -147,8 +147,12 @@ export const filterMailsReceived = (mails: MailInterface.MailReceived.Fetch[], f
     default:
       return mails.filter(mail => mail.data.folder === folder)
   }
-
 }
+
+export const filterMailBySearch = (mail: MailInterface.MailSent.Fetch, search: string) => {
+  return mail.data.subject.includes(search) || mail.data.body.includes(search)
+}
+
 export const groupMailsReceived = (mails: MailInterface.MailReceived.Fetch[]) => {
   const groups: Record<MailInterface.MailFolder, MailInterface.MailReceived.Fetch[]> = {
     INBOX: [],

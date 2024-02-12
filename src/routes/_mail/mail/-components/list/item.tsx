@@ -13,6 +13,7 @@ import { ContextMenu, ContextMenuCheckboxItem, ContextMenuContent, ContextMenuIt
 import { ArchiveIcon, ArchiveXIcon, ArrowRightIcon, BellIcon, BellOffIcon, ClockIcon, EyeOffIcon, InboxIcon, RefreshCwIcon, StarIcon, Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/shad/ui/skeleton"
+import { Route } from "../../_$mailFolder"
 
 export const Item: FunctionComponent<{
   mail: MailInterface.MailReceived.Fetch
@@ -269,6 +270,10 @@ type ItemBodyProps = {
 }
 
 function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
+  const { filter } = Route.useSearch()
+  if (filter && !utils.filterMailBySearch(mail, filter))
+    return null
+
   return (
     <Link
       to={mailLink}

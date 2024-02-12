@@ -12,9 +12,16 @@ import { useEffect, useState } from "react"
 import MailInterface from "@/lib/interfaces/mail"
 import { capitalize } from "lodash"
 import { Search } from "./-components/search"
+import { z } from 'zod'
+import * as utils from "./-components/utils"
+
+const searchParamsSchema = z.object({
+  filter: z.string().optional()
+})
 
 export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
   component: MailInboxLayout,
+  validateSearch: (search) => searchParamsSchema.parse(search),
   loader: ({ params }) => ({
     mailFolder: params.mailFolder.toUpperCase() as unknown as MailInterface.MailFolder
   })
@@ -27,8 +34,8 @@ function MailInboxLayout() {
   const isTabbable = ["INBOX", "SPAM", "ARCHIVE", "IMPORTANT", "TRASH"].includes(mailFolder)
 
   const mails = data ?
-    isTabbable ?
-      tab === "unread"
+    isTabbable
+      ? tab === "unread"
         ? data.filter(mail => !mail.data.isRead)
         : data
       : data

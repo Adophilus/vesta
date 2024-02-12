@@ -1,4 +1,4 @@
-import { Button } from "@/components/shad/ui/button";
+import { Button, buttonVariants } from "@/components/shad/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/shad/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/shad/ui/form";
 import { Input } from "@/components/shad/ui/input";
@@ -17,15 +17,53 @@ import { useGetMailsReceived, useInvalidate } from "./hooks/mail";
 import { useProfile } from "@/lib/hooks/profile";
 import { FileTile } from "./file-tile";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { cn } from "@/lib/shad/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/shad/ui/tooltip";
 
-export function MailCompose() {
+export function MailCompose({ isCollapsed }: { isCollapsed: boolean }) {
   const dialogCloseRef = useRef<HTMLButtonElement>(null)
+
+  if (isCollapsed)
+    return (
+      <div className="p-2">
+        <Dialog>
+          <DialogTrigger className="w-full" asChild>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    buttonVariants({ variant: "default", size: "icon" }),
+                    "h-9 w-9",
+                  )}
+                >
+                  <PenIcon className="h-4 w-4" />
+                  <span className="sr-only">Compose mail</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="flex items-center gap-4">
+                <span className="ml-auto text-muted-foreground">
+                  Compose
+                </span>
+              </TooltipContent>
+            </Tooltip>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[500px] p-4">
+            <DialogHeader>
+              <DialogTitle>Compose mail</DialogTitle>
+            </DialogHeader>
+            <ComposeMailForm onSend={() => dialogCloseRef.current?.click()} />
+            <DialogClose ref={dialogCloseRef} />
+          </DialogContent>
+        </Dialog>
+      </div>
+    )
 
   return (
     <div className="p-2">
       <Dialog>
-        <DialogTrigger className="w-full">
-          <Button className="flex items-center w-full" variant="outline">
+        <DialogTrigger className="w-full" asChild>
+          <Button className="flex items-center w-full" variant="default">
             <PenIcon className="h-4 w-4 mr-2" />
             Compose
           </Button>

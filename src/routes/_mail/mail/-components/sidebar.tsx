@@ -7,9 +7,31 @@ import { cn } from "@/lib/shad/utils";
 import { Button } from "@/components/shad/ui/button";
 import { useAuthStore } from "@/lib/hooks/auth"
 import { Link } from "@tanstack/react-router"
+import { combine } from "zustand/middleware";
+import { create } from "zustand";
 
-export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed: (_: boolean) => void }) {
+type SidebarStore = {
+  isCollapsed: boolean
+}
+
+export const useSidebar = create(
+  combine(
+    {
+      isCollapsed: false,
+    } as SidebarStore,
+    (set, get) => ({
+      setIsCollapsed: (cb: (prev: SidebarStore["isCollapsed"]) => SidebarStore["isCollapsed"]) => {
+        set({
+          isCollapsed: cb(get().isCollapsed)
+        })
+      }
+    })
+  )
+)
+
+export function Sidebar() {
   const signOut = useAuthStore(store => store.signOut)
+  const isCollapsed = useSidebar(store => store.isCollapsed)
 
   return (
     <div className="flex flex-col grow">
@@ -17,7 +39,7 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean, setIsCollapsed:
         <AccountSwitcher />
       </div>
       <Separator />
-      <MailCompose />
+      <MailCompose isCollapsed={isCollapsed} />
       <Separator />
       <Nav
         isCollapsed={isCollapsed}

@@ -49,14 +49,14 @@ const folders = [
 ]
 
 const MailFolderLink: FunctionComponent<{
+  isCollapsed: boolean
   link: {
     title: string
     label: string
     icon: LucideIcon
   }
-}> = ({ link }) => {
+}> = ({ link, isCollapsed }) => {
   const pathname = useRouterState({ select: state => state.location.pathname })
-  const isCollapsed = false
   const folderLink = `/mail/${link.title.toLowerCase()}`
   const isActive = pathname.startsWith(folderLink)
   const variant = isActive ? "default" : "ghost"
@@ -141,9 +141,10 @@ export function Nav({ isCollapsed }: NavProps) {
       className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
     >
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) => (
+        {links.map((link) => (
           <MailFolderLink
             key={link.title}
+            isCollapsed={isCollapsed}
             link={link}
           />
         ))}

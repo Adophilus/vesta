@@ -5,7 +5,7 @@ import { combine, persist } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { SerializedJunoDoc, serializeJunoDoc } from "../utils/serialize";
 
 type User = SerializedJunoDoc<JunoUser>
@@ -147,22 +147,27 @@ export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: Reac
 
 export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const init = useAuthStore(store => store.init)
-  const navigate = useNavigate()
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
 
   useEffect(() => {
     const unsubscribe = init((user) => {
+      if (!user) {
+        redirect({
+          to: "/auth/sign-in",
+        })
+        return
+      }
 
-      if (user && user.profiles.length === 0) {
-        navigate({
+      if (user.profiles.length === 0) {
+        redirect({
           to: "/profile/create"
         })
         return
       }
 
       if (pathname === "/auth/sign-in") {
-        navigate({
+        redirect({
           to: "/mail/$mailFolder",
           params: {
             mailFolder: "inbox"
@@ -173,7 +178,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     })
 
     return unsubscribe
-  }, [init, navigate, pathname])
+  }, [init, pathname])
 
   return children
 }

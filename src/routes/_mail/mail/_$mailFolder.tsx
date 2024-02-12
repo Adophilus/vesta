@@ -20,14 +20,14 @@ const searchParamsSchema = z.object({
 })
 
 export const Route = createFileRoute('/_mail/mail/_$mailFolder')({
-  component: MailInboxLayout,
+  component: MailFolderLayout,
   validateSearch: (search) => searchParamsSchema.parse(search),
   loader: ({ params }) => ({
     mailFolder: params.mailFolder.toUpperCase() as unknown as MailInterface.MailFolder
   })
 })
 
-function MailInboxLayout() {
+function MailFolderLayout() {
   const { mailFolder } = Route.useLoaderData()
   const { isLoading, isError, data } = useGetMailsReceived()
   const [tab, setTab] = useState<"all" | "unread">()

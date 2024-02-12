@@ -5,17 +5,18 @@ import { Loader2Icon } from "lucide-react"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { InternetComputerIcon } from "@/components/icons"
 import { Link } from "@tanstack/react-router"
+import { useState } from "react"
 
 export function SignInForm() {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const signIn = useAuthStore(store => store.signIn)
 
   async function onSubmit() {
-    setIsLoading(true)
+    setIsAuthenticating(true)
 
     await signIn()
 
-    setIsLoading(false)
+    setIsAuthenticating(false)
   }
 
   return (
@@ -31,8 +32,8 @@ export function SignInForm() {
       <div className="grid gap-6">
         <Button
           onClick={onSubmit}
-          variant="outline" type="button" disabled={isLoading}>
-          {isLoading ? (
+          variant="outline" type="button" disabled={isAuthenticating}>
+          {isAuthenticating ? (
             <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <InternetComputerIcon className="mr-2 h-4 w-4" />

@@ -150,7 +150,11 @@ export const filterMailsReceived = (mails: MailInterface.MailReceived.Fetch[], f
 }
 
 export const filterMailBySearch = (mail: MailInterface.MailSent.Fetch, search: string) => {
-  return mail.data.subject.includes(search) || mail.data.body.includes(search)
+  return mail.data.subject.includes(search)
+    || mail.data.sender.email.includes(search)
+    || mail.data.sender.firstName.includes(search)
+    || mail.data.sender.lastName.includes(search)
+    || mail.data.body.includes(search)
 }
 
 export const groupMailsReceived = (mails: MailInterface.MailReceived.Fetch[]) => {

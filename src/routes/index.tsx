@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({
 
 function IndexPage() {
   return (
-    <main>
+    <main className="selection:bg-black selection:text-primary">
       <Navbar />
       <Hero />
       <Contact />

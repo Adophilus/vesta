@@ -5,13 +5,13 @@ export function Footer() {
   const footerLinkClasses = "duration-250 hover:text-primary transition-colors"
 
   return (
-    <footer className="bg-black text-white">
+    <footer className="selection:bg-white selection:text-primary bg-black text-white">
       <Section>
-        <div className="flex justify-between py-8 font-semibold font-Montserrat">
-          <div>
+        <div className="flex flex-col lg:flex-row gap-y-4 justify-between py-8 font-semibold font-Montserrat">
+          <div className="flex justify-center">
             Powered by Juno
           </div>
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-1 items-center justify-center">
             Made with <HeartIcon className="w-4 h-4 stroke-red-600 fill-red-600" /> by <a href="https://github.com/Adophilus" className={footerLinkClasses} target="_blank" rel="noreferrer">@Adophilus</a> & <a href="https://github.com/AustinChris1" className={footerLinkClasses} target="_blank" rel="noreferrer">@AustinChris</a>
           </div>
         </div>

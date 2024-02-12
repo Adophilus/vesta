@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "./button"
 import { SendHorizonalIcon } from "lucide-react"
+import { Section } from "./section"
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
@@ -125,16 +126,18 @@ function ContactForm() {
 
 export function Contact() {
   return (
-    <section className="bg-black text-white" id="contact">
-      <div className="mx-auto max-w-7xl py-36 grid grid-cols-2 gap-36">
-        <div className="flex flex-col justify-center items-center gap-4">
-          <header className="font-Montserrat text-6xl text-center font-semibold">
-            Get in touch with us
-          </header>
-          <div className="h-1 w-48 bg-primary" />
+    <section className="selection:bg-white selection:text-primary bg-black text-white" id="contact">
+      <Section>
+        <div className="py-36 grid lg:grid-cols-2 gap-x-36 gap-y-10">
+          <div className="flex flex-col justify-center items-center gap-4">
+            <header className="font-Montserrat text-3xl sm:text-4xl lg:text-6xl text-center font-semibold">
+              Get in touch with us
+            </header>
+            <div className="h-1 w-48 bg-primary" />
+          </div>
+          <ContactForm />
         </div>
-        <ContactForm />
-      </div>
+      </Section>
     </section>
   )
 }

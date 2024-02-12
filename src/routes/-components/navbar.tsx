@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "./button"
-import { ArrowRightIcon, DotIcon } from "lucide-react";
+import { ArrowRightIcon, DotIcon, MenuIcon, RocketIcon } from "lucide-react";
 import "./navbar.css"
 import { Section } from "./section";
 import { useScroll, useMotionValueEvent } from "framer-motion"
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "@/components/shad/ui/sheet"
 
 export function Navbar() {
   const [showBackground, setShowBackground] = useState(false)
@@ -27,14 +28,14 @@ export function Navbar() {
           <div className="flex items-center text-3xl font-semibold backed">
             <Link
               to="/"
-              className="flex items-end"
+              className="flex items-end select-none"
             >
               <span className="text-primary">J</span>
               Mail
               <DotIcon className="-ml-2 -mb-1 stroke-primary h-8 w-8" />
             </Link>
           </div>
-          <div className="flex gap-8 font-semibold text-lg">
+          <div className="hidden lg:flex gap-8 font-semibold text-lg">
             <Link
               className="hover:text-primary transition-colors duration-250 nav-link"
               to="/about"
@@ -63,7 +64,7 @@ export function Navbar() {
               Mail
             </Link>
           </div>
-          <div>
+          <div className="hidden lg:block">
             <Link
               to="/mail/$mailFolder"
               params={{
@@ -71,13 +72,87 @@ export function Navbar() {
               }}
             >
               <Button className="bg-white font-semibold flex items-center gap-2">
-                Get Started
-                <ArrowRightIcon className="w-5 h-5" />
+                Launch
+                <RocketIcon className="w-5 h-5" />
               </Button>
             </Link>
+          </div>
+          <div className="lg:hidden">
+            <MobileNav />
           </div>
         </div>
       </Section>
     </nav>
   )
+}
+
+function MobileNav() {
+  const closeBtnRef = useRef<HTMLButtonElement>(null)
+
+  const onClose = () => {
+    closeBtnRef.current?.click()
+  }
+
+  return (
+    <Sheet>
+      <SheetTrigger>
+        <Button className="bg-white font-semibold flex items-center gap-2">
+          <MenuIcon className="w-5 h-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="flex flex-col">
+        <div className="py-8 flex flex-col justify-between grow">
+          <div className="flex flex-col gap-4 text-xl font-medium">
+            <Link
+              className="hover:text-primary transition-colors duration-250 nav-link"
+              to="/about"
+              onClick={onClose}
+            >
+              About
+            </Link>
+            <Link
+              className="hover:text-primary transition-colors duration-250"
+              to="/"
+              hash="contact"
+              onClick={onClose}
+            >
+              Contact
+            </Link>
+            <Link
+              className="hover:text-primary transition-colors duration-250"
+              to="/presentation"
+              onClick={onClose}
+            >
+              Presentation
+            </Link>
+            <Link
+              className="hover:text-primary transition-colors duration-250"
+              to="/mail/$mailFolder"
+              params={{
+                mailFolder: "inbox"
+              }}
+              onClick={onClose}
+            >
+              Mail
+            </Link>
+          </div>
+        </div>
+        <SheetFooter>
+          <Link
+            to="/mail/$mailFolder"
+            params={{
+              mailFolder: "inbox"
+            }}
+            onClick={onClose}
+          >
+            <Button className="w-full flex justify-between bg-white font-semibold items-center gap-2">
+              Launch
+              <RocketIcon className="w-5 h-5" />
+            </Button>
+          </Link>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  )
+
 }

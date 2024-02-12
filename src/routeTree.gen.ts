@@ -12,6 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as WorkspaceImport } from './routes/workspace'
+import { Route as PresentationImport } from './routes/presentation'
+import { Route as ContactImport } from './routes/contact'
+import { Route as AboutImport } from './routes/about'
 import { Route as MailImport } from './routes/_mail'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileCreateImport } from './routes/profile/create'
@@ -25,6 +28,21 @@ import { Route as MailMailMailFolderMailReceivedIdImport } from './routes/_mail/
 
 const WorkspaceRoute = WorkspaceImport.update({
   path: '/workspace',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PresentationRoute = PresentationImport.update({
+  path: '/presentation',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ContactRoute = ContactImport.update({
+  path: '/contact',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AboutRoute = AboutImport.update({
+  path: '/about',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +99,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MailImport
       parentRoute: typeof rootRoute
     }
+    '/about': {
+      preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/contact': {
+      preLoaderRoute: typeof ContactImport
+      parentRoute: typeof rootRoute
+    }
+    '/presentation': {
+      preLoaderRoute: typeof PresentationImport
+      parentRoute: typeof rootRoute
+    }
     '/workspace': {
       preLoaderRoute: typeof WorkspaceImport
       parentRoute: typeof rootRoute
@@ -121,6 +151,9 @@ export const routeTree = rootRoute.addChildren([
       MailMailMailFolderMailReceivedIdRoute,
     ]),
   ]),
+  AboutRoute,
+  ContactRoute,
+  PresentationRoute,
   WorkspaceRoute,
   AuthSignInRoute,
   LegalPrivacyRoute,

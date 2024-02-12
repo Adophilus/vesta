@@ -269,7 +269,7 @@ type ItemBodyProps = {
   isSelected: boolean
 }
 
-function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
+function ItemBody({ mail, mailReceived, mailLink }: ItemBodyProps) {
   const { filter } = Route.useSearch()
   if (filter && !utils.filterMailBySearch(mail, filter))
     return null

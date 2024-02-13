@@ -14,9 +14,11 @@ export function Hero() {
         className="backed grow flex flex-col gap-12 items-center justify-center"
       >
         <div className="flex flex-col gap-y-4 p-4">
-          <WhatsNew />
+          <div className="flex justify-center">
+            <WhatsNew />
+          </div>
           <header
-            className="font-Poppins font-bold text-center text-5xl leading-relaxed lg:leding-noraml lg:text-8xl max-w-2xl lg:max-w-6xl px-4 lg:px-8"
+            className="font-Poppins font-bold text-center text-5xl leading-relaxed lg:leding-noraml lg:text-7xl 2xl:text-8xl max-w-2xl lg:max-w-5xl 2xl:max-w-6xl px-4 lg:px-8"
           >
             Increase <span
               style={{ WebkitTextStroke: "3px black" }}

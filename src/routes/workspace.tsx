@@ -12,7 +12,7 @@ function WorkspacePage() {
     <div className="grow flex flex-col gap-8 bg-primary text-white justify-center items-center">
     <div className="flex flex-col gap-4 items-center justify-center">
       <BriefcaseIcon className="w-36 h-36" />
-      <header className="text-7xl font-bold">
+      <header className="text-5xl md:text-6xl lg:text-7xl text-center font-bold">
         Coming Soon
       </header>
       </div>

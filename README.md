@@ -1,7 +1,7 @@
 # <img src="./public/images/logo.svg" style="width: 32px; height: 32px" />JMail
 > An all in one platform for team productivity
 
-Live deployment: (https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io)[https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io]
+Live deployment: [https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io](https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io)
 
 ## About
 

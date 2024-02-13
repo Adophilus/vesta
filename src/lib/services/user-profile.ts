@@ -20,15 +20,19 @@ namespace UserProfileService {
     return profile
   }
 
-  export const getProfilesByUserId = async (id: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
+  export const getProfilesByUserId = async (userId: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
+    console.log("Attempting to fetch profile with the user ID: ", userId)
+
     const profiles: ListResults<UserProfileInterface.UserProfile.Fetch> = await listDocs({
       collection: COLLECTION_KEY,
       filter: {
         matcher: {
-          description: `<|userId:${id}|>`
+          description: `<|userId:${userId}|>`
         }
       }
     })
+
+    console.log("Profiled found:", profiles)
 
     return profiles.items
   }

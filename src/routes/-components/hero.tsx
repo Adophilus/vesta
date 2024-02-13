@@ -37,7 +37,7 @@ export function Hero() {
             mailFolder: "inbox"
           }}
         >
-          <Button className="flex font-Montserrat items-center gap-3 text-2xl font-semibold">
+          <Button className="bg-white flex font-Montserrat items-center gap-3 text-2xl font-semibold">
             Launch
             <RocketIcon className="w-6 h-6 stroke-[3px]" />
           </Button>
@@ -66,7 +66,7 @@ function WhatsNew() {
           }
         }}
       >
-        <span className="rounded-full bg-black text-white p-2 px-4 inline-flex items-center gap-1"><SparklesIcon className="fill-white w-3 h-3" /> BETA</span> Have a sneak-peak at our new features <ArrowRightIcon className="w-4 h-4 stroke-[3px] fill-black stroke-black" />
+        <span className="rounded-full bg-black text-white p-1 px-3 inline-flex items-center gap-1"><SparklesIcon className="fill-white w-3 h-3" /> BETA</span> Have a sneak-peak at our new features <ArrowRightIcon className="w-4 h-4 stroke-[3px] fill-black stroke-black" />
       </motion.button>
     </Link>
   )

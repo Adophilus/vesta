@@ -28,6 +28,7 @@ export function SignInForm() {
       })
       .then(() => {
         setIsAuthenticating(false)
+        console.log("You should be redirected now")
         navigate({
           to: "/mail/$mailFolder",
           params: {

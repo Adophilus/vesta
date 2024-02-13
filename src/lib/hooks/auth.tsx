@@ -86,9 +86,7 @@ export const useAuthStore = create(
         }
 
         const init = (cb: (user: { user: User, profiles: UserProfile[] } | null) => void) => {
-          console.log("initted with cb:", cb)
           return AuthService.subscribe(async (user) => {
-            console.log("this should be a user or null:", user)
             if (!user) {
               set({
                 user: null,
@@ -153,16 +151,12 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     const unsubscribe = init((user) => {
-      console.log(user)
       if (!user) {
         navigate({
           to: "/auth/sign-in",
         })
         return
       }
-
-      console.log(user.profiles)
-      console.log(pathname)
 
       if (user.profiles.length === 0) {
         navigate({

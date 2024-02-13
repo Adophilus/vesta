@@ -108,8 +108,6 @@ export const useAuthStore = create(
               .then(profiles => profiles
                 .map(profile => serializeJunoDoc(profile)))
 
-            console.log(profiles)
-
             set({
               user: processedUser,
               profiles,
@@ -148,26 +146,26 @@ export const AuthGuard: FunctionComponent<{ fallback?: ReactNode, children: Reac
 export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const init = useAuthStore(store => store.init)
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     const unsubscribe = init((user) => {
       if (!user) {
-        redirect({
+        navigate({
           to: "/auth/sign-in",
         })
         return
       }
 
       if (user.profiles.length === 0) {
-        redirect({
+        navigate({
           to: "/profile/create"
         })
         return
       }
 
       if (pathname === "/auth/sign-in") {
-        redirect({
+        navigate({
           to: "/mail/$mailFolder",
           params: {
             mailFolder: "inbox"
@@ -178,7 +176,7 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
     })
 
     return unsubscribe
-  }, [init, pathname])
+  }, [init, navigate, pathname])
 
   return children
 }

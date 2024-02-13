@@ -103,9 +103,9 @@ const ComposeMailForm: FunctionComponent<{ onSend: () => void }> = ({ onSend }) 
     resolver: zodResolver(formSchema),
     defaultValues: {
       files: [],
-      subject: "Test",
-      recipientEmail: "adophilus@jmail.com",
-      body: "This is a test email",
+      subject: "",
+      recipientEmail: "",
+      body: "",
       cc: [],
       bcc: []
     }

@@ -3,3 +3,14 @@
   background-color: black;
   -webkit-text-stroke-color: white;
 }
+
+.banner-bg {
+  background-color: #7888ff;
+  opacity: 0.8;
+  background: radial-gradient(circle, transparent 20%, #7888ff 20%, #7888ff 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #7888ff 20%, #7888ff 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#ffffff 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #ffffff 2px, #7888ff 2px) -1px 0;
+  background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+}
+
+.banner-backed {
+  background: radial-gradient(#7888ff, rgba(120, 136, 255, 0.2));
+}

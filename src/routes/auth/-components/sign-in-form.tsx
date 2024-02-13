@@ -5,13 +5,14 @@ import { Button } from "../../-components/button"
 import { Loader2Icon } from "lucide-react"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { InternetComputerIcon } from "@/components/icons"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export function SignInForm() {
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const signIn = useAuthStore(store => store.signIn)
+  const navigate = useNavigate()
 
   async function onSubmit() {
     setIsAuthenticating(true)
@@ -27,6 +28,12 @@ export function SignInForm() {
       })
       .then(() => {
         setIsAuthenticating(false)
+        navigate({
+          to: "/mail/$mailFolder",
+          params: {
+            mailFolder: "inbox"
+          }
+        })
       })
   }
 

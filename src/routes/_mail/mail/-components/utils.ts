@@ -183,6 +183,8 @@ export const formatMailProfile = (sender: UserProfileInterface.UserProfile.Creat
 }
 
 export const uploadAssets = async (files: File[]) => {
+  if (files.length === 0) return []
+
   return new Promise<MailInterface.MailAttachment[]>((resolve, reject) => {
     toast.promise(
       Promise.all(files.map(file => AssetService.upload(file))),

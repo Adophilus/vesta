@@ -86,7 +86,9 @@ export const useAuthStore = create(
         }
 
         const init = (cb: (user: { user: User, profiles: UserProfile[] } | null) => void) => {
+          console.log("initted with cb:", cb)
           return AuthService.subscribe(async (user) => {
+            console.log("this should be a user or null:", user)
             if (!user) {
               set({
                 user: null,

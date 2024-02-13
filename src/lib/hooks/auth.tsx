@@ -158,7 +158,6 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
       }
 
       if (user.profiles.length === 0) {
-        console.log("redirecting to /profile/create")
         navigate({
           to: "/profile/create"
         })

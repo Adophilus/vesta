@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { SignInForm } from './-components/sign-in-form'
 import { ArrowLeftIcon, MailIcon, ZapIcon } from 'lucide-react'
 import { motion } from "framer-motion"
@@ -16,7 +16,7 @@ export default function SignInPage() {
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex items-center justify-center border-r-[3px] border-r-black">
           <div className="absolute inset-0 bg-primary" />
           <div className="absolute inset-0 banner-bg" />
-          <div className="z-10 flex flex-col items-center justify-center gap-y-10 backed">
+          <div className="z-10 flex flex-col items-center justify-center gap-y-10 banner-backed">
             <motion.div
               animate={{
                 y: [0, -50],
@@ -44,10 +44,9 @@ export default function SignInPage() {
           <div className="flex justify-start p-4">
             <Link
               to="/"
-              className="border-b-2 border-b-primary flex items-center gap-2 text-sm"
             >
               <Button>
-                <ArrowLeftIcon className="w-4 h-4" />
+                <ArrowLeftIcon className="stroke-[3px] w-4 h-4" />
               </Button>
             </Link>
           </div>

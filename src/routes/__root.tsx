@@ -10,10 +10,8 @@ const queryClient = new QueryClient()
 export const Route = createRootRoute({
   component: () => (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Outlet />
-        <Toaster />
-      </AuthProvider>
+      <Outlet />
+      <Toaster />
       {/*<TanStackRouterDevtools initialIsOpen={false} />*/}
       {/*<ReactQueryDevtools initialIsOpen={false} />*/}
     </QueryClientProvider>

@@ -11,6 +11,6 @@
   background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
 }
 
-.backed {
+.banner-backed {
   background: radial-gradient(#7888ff, rgba(120, 136, 255, 0.2));
 }

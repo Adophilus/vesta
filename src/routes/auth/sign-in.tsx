@@ -1,8 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { SignInForm } from './-components/sign-in-form'
-import { MailIcon, ZapIcon } from 'lucide-react'
+import { ArrowLeftIcon, MailIcon, ZapIcon } from 'lucide-react'
 import { motion } from "framer-motion"
 import "./-components/sign-in.css"
+import { Button } from '../-components/button'
 
 export const Route = createFileRoute('/auth/sign-in')({
   component: SignInPage
@@ -11,10 +12,11 @@ export const Route = createFileRoute('/auth/sign-in')({
 export default function SignInPage() {
   return (
     <>
-      <div className="font-Poppins container relative h-full flex flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="font-Poppins container relative grow md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex items-center justify-center border-r-[3px] border-r-black">
           <div className="absolute inset-0 bg-primary" />
-          <div className="z-10 flex flex-col items-center justify-center gap-y-10">
+          <div className="absolute inset-0 banner-bg" />
+          <div className="z-10 flex flex-col items-center justify-center gap-y-10 backed">
             <motion.div
               animate={{
                 y: [0, -50],
@@ -38,8 +40,19 @@ export default function SignInPage() {
             </header>
           </div>
         </div>
-        <div className="lg:p-8">
+        <div className="h-full w-full flex flex-col justify-between lg:p-8">
+          <div className="flex justify-start p-4">
+            <Link
+              to="/"
+              className="border-b-2 border-b-primary flex items-center gap-2 text-sm"
+            >
+              <Button>
+                <ArrowLeftIcon className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
           <SignInForm />
+          <div />
         </div>
       </div >
     </>

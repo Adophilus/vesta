@@ -2,7 +2,7 @@ import * as React from "react"
 
 // import { Button } from "@/components/shad/ui/button"
 import { Button } from "../../-components/button"
-import { Loader2Icon } from "lucide-react"
+import { ArrowLeftIcon, Loader2Icon } from "lucide-react"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { InternetComputerIcon } from "@/components/icons"
 import { Link, useNavigate } from "@tanstack/react-router"
@@ -54,7 +54,7 @@ export function SignInForm() {
           Intenet ID
         </Button>
       </div>
-      <p className="px-8 text-center text-sm text-muted-foreground">
+      <p className="px-8 text-center text-xs text-muted-foreground">
         By clicking continue, you agree to our{" "}
         <Link
           to="/legal/terms"

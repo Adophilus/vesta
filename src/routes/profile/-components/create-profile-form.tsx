@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/shad/ui/button"
-import { ArrowRightIcon, Loader2Icon } from "lucide-react"
+import { ArrowLeftIcon, ArrowRightIcon, Loader2Icon } from "lucide-react"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"

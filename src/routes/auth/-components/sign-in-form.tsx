@@ -12,7 +12,6 @@ import { toast } from "sonner"
 export function SignInForm() {
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const signIn = useAuthStore(store => store.signIn)
-  const navigate = useNavigate()
 
   async function onSubmit() {
     setIsAuthenticating(true)
@@ -28,13 +27,6 @@ export function SignInForm() {
       })
       .then(() => {
         setIsAuthenticating(false)
-        console.log("You should be redirected now")
-        navigate({
-          to: "/mail/$mailFolder",
-          params: {
-            mailFolder: "inbox"
-          }
-        })
       })
   }
 

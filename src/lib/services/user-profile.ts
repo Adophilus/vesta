@@ -21,9 +21,6 @@ namespace UserProfileService {
   }
 
   export const getProfilesByUserId = async (userId: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
-    console.log("Attempting to fetch profile with the user ID: ", userId)
-    console.log("using description matcher:", `<|userId:${userId}|>`)
-
     const profiles: ListResults<UserProfileInterface.UserProfile.Fetch> = await listDocs({
       collection: COLLECTION_KEY,
       filter: {
@@ -33,9 +30,8 @@ namespace UserProfileService {
       }
     })
 
-    console.log("Profiled found:", profiles)
-
     return profiles.items
+      .filter(profile => profile.data.userId === userId)
   }
 
   export const getProfileByEmail = async (email: string): Promise<UserProfileInterface.UserProfile.Fetch | undefined> => {

@@ -4,6 +4,7 @@ import { ArrowLeftIcon, MailIcon, ZapIcon } from 'lucide-react'
 import { motion } from "framer-motion"
 import "./-components/sign-in.css"
 import { Button } from '../-components/button'
+import { AuthProvider } from '@/lib/hooks/auth'
 
 export const Route = createFileRoute('/auth/sign-in')({
   component: SignInPage
@@ -11,7 +12,7 @@ export const Route = createFileRoute('/auth/sign-in')({
 
 export default function SignInPage() {
   return (
-    <>
+    <AuthProvider>
       <div className="font-Poppins container relative grow md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex items-center justify-center border-r-[3px] border-r-black">
           <div className="absolute inset-0 bg-primary" />
@@ -54,6 +55,6 @@ export default function SignInPage() {
           <div />
         </div>
       </div >
-    </>
+    </AuthProvider>
   )
 }

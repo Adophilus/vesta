@@ -5,7 +5,7 @@ export function Footer() {
   const footerLinkClasses = "duration-250 hover:text-primary transition-colors"
 
   return (
-    <footer className="selection:bg-white selection:text-primary bg-black text-white">
+    <footer className="selection:bg-white selection:text-primary bg-black text-white text-xs md:text-base">
       <Section>
         <div className="flex flex-col lg:flex-row gap-y-4 justify-between py-8 font-semibold font-Montserrat">
           <div className="flex justify-center">

@@ -151,16 +151,12 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     const unsubscribe = init((user) => {
-      console.log(user)
       if (!user) {
         navigate({
           to: "/auth/sign-in",
         })
         return
       }
-
-      console.log(user.profiles)
-      console.log(pathname)
 
       if (user.profiles.length === 0) {
         navigate({

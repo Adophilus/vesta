@@ -51,7 +51,7 @@ export function SignInForm() {
           ) : (
             <InternetComputerIcon className="h-4 w-4" />
           )}{" "}
-          Intenet ID
+          Internet ID
         </Button>
       </div>
       <p className="px-8 text-center text-xs text-muted-foreground">

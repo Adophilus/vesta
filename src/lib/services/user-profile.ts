@@ -22,6 +22,7 @@ namespace UserProfileService {
 
   export const getProfilesByUserId = async (userId: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
     console.log("Attempting to fetch profile with the user ID: ", userId)
+    console.log("using description matcher:", `<|userId:${userId}|>`)
 
     const profiles: ListResults<UserProfileInterface.UserProfile.Fetch> = await listDocs({
       collection: COLLECTION_KEY,

@@ -5,6 +5,8 @@ import { useAuthStore } from '@/lib/hooks/auth'
 export const Route = createFileRoute('/profile/create')({
   component: CreateProfilePage,
   beforeLoad: async () => {
+    console.log("beforeLoad")
+
     const { isSignedIn, profiles } = useAuthStore.getState()
     if (!isSignedIn) {
       throw redirect({

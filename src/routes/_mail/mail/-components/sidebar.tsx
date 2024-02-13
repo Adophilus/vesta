@@ -6,7 +6,7 @@ import { AccountSwitcher } from "./account-switcher";
 import { cn } from "@/lib/shad/utils";
 import { Button } from "@/components/shad/ui/button";
 import { useAuthStore } from "@/lib/hooks/auth"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { combine } from "zustand/middleware";
 import { create } from "zustand";
 
@@ -30,8 +30,17 @@ export const useSidebar = create(
 )
 
 export function Sidebar() {
-  const signOut = useAuthStore(store => store.signOut)
+  const signOutUser = useAuthStore(store => store.signOut)
   const isCollapsed = useSidebar(store => store.isCollapsed)
+  const navigate = useNavigate()
+
+  const signOut = () => {
+    navigate({
+      to: '/auth/sign-in'
+    })
+
+    signOutUser()
+  }
 
   return (
     <div className="flex flex-col grow">

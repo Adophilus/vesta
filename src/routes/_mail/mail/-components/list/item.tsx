@@ -300,7 +300,7 @@ function ItemBody({ mail, mailReceived, mailLink }: ItemBodyProps) {
             )}
           >
             {mailReceived.data.isStarred && (
-              <StarIcon className="fill-foreground h-4 w-4" />
+              <StarIcon className="fill-yellow-400 stroke-none h-4 w-4" />
             )}
             {formatDistanceToNow(new Date(mail.data.sentAt), {
               addSuffix: true,

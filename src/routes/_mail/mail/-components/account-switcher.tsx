@@ -43,7 +43,8 @@ export const AccountSwitcher: FunctionComponent = () => {
         aria-label="Select account"
       >
         <SelectValue placeholder="Select an account">
-          <span className={cn("ml-2", isCollapsed && "hidden")}>
+          <span className={cn("ml-2 flex gap-1 items-center", isCollapsed && "hidden")}>
+            <LogoIcon className="w-4 h-4" />
             {profileFullName}
           </span>
         </SelectValue>
@@ -54,7 +55,7 @@ export const AccountSwitcher: FunctionComponent = () => {
             key={profile.data.email}
             value={index.toString()}
           >
-            <div className="flex items-center [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
+            <div className="flex items-center gap-1 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
               <LogoIcon className="w-4 h-4" />
               {profile.data.email}
             </div>

@@ -40,7 +40,6 @@ export function useGetMailReceived(id: string) {
 
   return useQuery({
     queryKey: ['getMailReceived', id],
-    refetchInterval: 10000,
     queryFn: async () => {
       if (!profile)
         throw new Error('Invalid profile!')
@@ -64,7 +63,6 @@ export function useGetMailSent(id: string) {
 
   return useQuery({
     queryKey: ['getMailSent', id],
-    refetchInterval: 10000,
     queryFn: async () => {
       if (!profile)
         throw new Error('Invalid profile!')

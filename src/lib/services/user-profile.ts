@@ -1,13 +1,20 @@
 import { ListResults, getDoc, listDocs, setDoc } from "@junobuild/core"
 import UserProfileInterface from "../interfaces/user-profile"
 import { ulid } from "ulidx"
+import { Result } from "true-myth"
 
 namespace UserProfileService {
   const COLLECTION_KEY = "users"
 
   type CreateUserProfilePayload = UserProfileInterface.UserProfile.Create
 
-  export const createProfile = async (payload: CreateUserProfilePayload) => {
+  export const createProfile = async (payload: CreateUserProfilePayload): Promise<Result<UserProfileInterface.UserProfile.Fetch, string>> => {
+    const existingProfile = await getProfileByEmail(payload.email)
+
+    if (existingProfile)
+      return Result.err("Email address has been taken!")
+    
+
     const profile = await setDoc<UserProfileInterface.UserProfile.Create>({
       collection: COLLECTION_KEY,
       doc: {
@@ -17,7 +24,7 @@ namespace UserProfileService {
       }
     })
 
-    return profile
+    return Result.ok(profile)
   }
 
   export const getProfilesByUserId = async (userId: string): Promise<UserProfileInterface.UserProfile.Fetch[]> => {
@@ -43,9 +50,11 @@ namespace UserProfileService {
         }
       }
     })
-    console.log(profiles)
 
-    return profiles.items[0]
+    const profile = profiles.items
+      .filter(profile => profile.data.email === email)
+
+    return profile[0]
   }
 }
 

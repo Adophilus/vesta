@@ -36,7 +36,7 @@ namespace MailService {
     });
 
     return docs.items
-      .filter(mail => mail.data.sender.userId === profile.data.userId)
+      .filter(mail => mail.data.sender.email === profile.data.email)
   }
 
   type GetReceivedMailsPayload = {
@@ -58,7 +58,12 @@ namespace MailService {
     });
 
     return docs.items
-      .filter(mail => mail.data.recipientEmail === profile.data.email)
+      .filter(mail => {
+        // console.log("mail.data.recipientEmail", mail.data.recipientEmail)
+        // console.log("profile.data.email:", profile.data.email)
+
+        return mail.data.recipientEmail === profile.data.email
+      })
   }
 
   export const getReceivedMail = async (id: string): Promise<MailInterface.MailReceived.Fetch | undefined> => {

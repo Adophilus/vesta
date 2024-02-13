@@ -115,12 +115,12 @@ export const MailDisplay: FunctionComponent<{
               invalidate={invalidate}
             />
           )}
-          <Separator orientation="vertical" className="mx-1 h-6" />
+          {/*<Separator orientation="vertical" className="mx-1 h-6" />
           <MailTooltip.Snooze
             mailReceived={mailReceived}
             mail={mail}
             invalidate={invalidate}
-          />
+          />*/}
         </div>
         <div className="ml-auto flex items-center gap-2">
           <Tooltip>

@@ -60,21 +60,31 @@ export function CreateProfileForm() {
 
     setIsSubmitting(true)
 
-    await UserProfileService.createProfile({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: `${data.email}@${data.emailExtension}`,
-      userId: user.key,
-      organizationId: "" // TODO: Add organizationId
-    })
-      .then(async () => {
-        await refetchProfiles()
-        setIsSubmitting(false)
+    toast.promise(
+      new Promise<string>((resolve, reject) => UserProfileService.createProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: `${data.email}@${data.emailExtension}`,
+        userId: user.key,
+        organizationId: "" // TODO: Add organizationId
       })
-      .catch(err => {
-        console.log(err)
-        toast.error("An error occurred while creating profile")
-        setIsSubmitting(false)
+        .then(res => res.match({
+          Ok: () => resolve("Profile created"),
+          Err: (err) => reject(err)
+
+        }))
+        .catch(err => {
+          console.log(err)
+          reject("An error occurred while creating profile")
+        })),
+      {
+        loading: "Creating profile",
+        success: (msg) => {
+          refetchProfiles()
+            .then(() => setIsSubmitting(false))
+          return msg
+        },
+        error: (err) => err
       })
   }
 

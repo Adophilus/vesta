@@ -127,10 +127,10 @@ const ItemWithContextMenu: FunctionComponent<{
             </>
           )}
         </ContextMenuItem>
-        <ContextMenuItem className="gap-2">
+        {/*<ContextMenuItem className="gap-2">
           <ClockIcon className="h-4 w-4" />
           Snooze
-        </ContextMenuItem>
+        </ContextMenuItem>*/}
         {["INBOX", "IMPORTANT"] && (
           <ContextMenuItem
             onClick={() => {

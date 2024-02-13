@@ -17,12 +17,12 @@ import { toast } from "sonner"
 const formSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string(),
+  email: z.string().regex(/^[a-zA-Z0-9]+$/, { message: "Please enter in the prefix before @"}),
   emailExtension: z.string()
 })
 
 const emailExtensions = [
-  "jmail.com"
+  "@jmail.com"
 ]
 
 type FormSchema = z.infer<typeof formSchema>
@@ -30,21 +30,10 @@ type FormSchema = z.infer<typeof formSchema>
 export function CreateProfileForm() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const { user, profiles, refetchProfiles } = useAuthStore(store => ({
+  const { user, refetchProfiles } = useAuthStore(store => ({
     user: store.user,
-    profiles: store.profiles,
     refetchProfiles: store.refetchProfiles
   }))
-
-  useEffect(() => {
-    if (profiles && profiles.length > 0)
-      navigate({
-        to: "/mail/$mailFolder",
-        params: {
-          mailFolder: "inbox"
-        }
-      })
-  }, [profiles, navigate])
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -53,7 +42,13 @@ export function CreateProfileForm() {
     }
   })
 
-  if (!user) return null
+  if (!user) {
+    navigate({
+      to: "/auth/sign-in"
+    })
+
+    return null
+  }
 
   async function onSubmit(data: FormSchema) {
     if (!user) return null
@@ -64,7 +59,7 @@ export function CreateProfileForm() {
       new Promise<string>((resolve, reject) => UserProfileService.createProfile({
         firstName: data.firstName,
         lastName: data.lastName,
-        email: `${data.email}@${data.emailExtension}`,
+        email: `${data.email}${data.emailExtension}`,
         userId: user.key,
         organizationId: "" // TODO: Add organizationId
       })
@@ -84,7 +79,10 @@ export function CreateProfileForm() {
             .then(() => setIsSubmitting(false))
           return msg
         },
-        error: (err) => err
+        error: (err) => {
+          setIsSubmitting(false)
+          return err
+        }
       })
   }
 

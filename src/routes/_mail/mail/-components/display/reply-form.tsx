@@ -11,7 +11,7 @@ import { z } from "zod"
 import * as utils from "../utils"
 import { useAuthStore } from "@/lib/hooks/auth"
 import { useProfile } from "@/lib/hooks/profile"
-import { Loader2Icon, PaperclipIcon, XIcon } from "lucide-react"
+import { Loader2Icon, PaperclipIcon, SendHorizonalIcon, XIcon } from "lucide-react"
 import AssetService from "@/lib/services/asset"
 import { useRouter } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
@@ -147,11 +147,16 @@ export const ReplyForm = forwardRef<HTMLTextAreaElement, ReplyFormProps>(({ mail
               type="submit"
               disabled={isSubmitting}
               size="sm"
-              className="ml-auto"
+              className="ml-auto flex gap-2"
             >
               {isSubmitting ? (
                 <Loader2Icon className="w-4 h-4 animate-spin" />
-              ) : "Send"}
+              ) : (
+                <>
+                  Send
+                  <SendHorizonalIcon className="w-4 h-4" />
+                </>
+              )}
             </Button>
           </div>
         </div>

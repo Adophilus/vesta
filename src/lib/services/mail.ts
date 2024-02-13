@@ -3,6 +3,7 @@ import { ulid } from "ulidx";
 import MailInterface from "../interfaces/mail";
 import UserProfileInterface from "../interfaces/user-profile";
 import { SerializedJunoDoc } from "../utils/serialize";
+import UserProfileService from "./user-profile";
 
 namespace MailService {
   const MAILS_SENT_COLLECTION_KEY = "mails-sent"
@@ -90,27 +91,41 @@ namespace MailService {
       },
     });
 
-    for (const recipient of [payload.recipientEmail, payload.sender.email, ...payload.cc, ...payload.bcc]) {
-      const folder = recipient === payload.sender.email ? "SENT" : "INBOX"
-      await setDoc<MailInterface.MailReceived.Create>({
-        collection: MAILS_RECEIVED_COLLECTION_KEY,
-        doc: {
-          key: ulid(),
-          description: `<|recipientEmail:${recipient}|>`,
-          data: {
-            folder,
-            mailId: mail.key,
-            sender: payload.sender,
-            recipientEmail: recipient,
-            isRead: false,
-            isMuted: false,
-            isStarred: false,
-            labels: [], // TODO: Add labels
-            tags: [] // TODO: Add tags
+    new Promise((resolve, reject) => {
+      (async () => {
+        for (const recipient of [payload.recipientEmail, payload.sender.email, ...payload.cc, ...payload.bcc]) {
+          try {
+            const existingRecipient = await UserProfileService.getProfileByEmail(recipient)
+            if (!existingRecipient) continue
+
+            const folder = recipient === payload.sender.email ? "SENT" : "INBOX"
+            await setDoc<MailInterface.MailReceived.Create>({
+              collection: MAILS_RECEIVED_COLLECTION_KEY,
+              doc: {
+                key: ulid(),
+                description: `<|recipientEmail:${recipient}|>`,
+                data: {
+                  folder,
+                  mailId: mail.key,
+                  sender: payload.sender,
+                  recipientEmail: recipient,
+                  isRead: false,
+                  isMuted: false,
+                  isStarred: false,
+                  labels: [], // TODO: Add labels
+                  tags: [] // TODO: Add tags
+                }
+              }
+            })
+          }
+          catch (err) {
+            console.log(err)
           }
         }
-      })
-    }
+
+        resolve(true)
+      })()
+    })
 
     return mail
   }

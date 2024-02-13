@@ -13,6 +13,7 @@ import { ContextMenu, ContextMenuCheckboxItem, ContextMenuContent, ContextMenuIt
 import { ArchiveIcon, ArchiveXIcon, ArrowRightIcon, BellIcon, BellOffIcon, ClockIcon, EyeOffIcon, InboxIcon, RefreshCwIcon, StarIcon, Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/shad/ui/skeleton"
+import { Route } from "../../_$mailFolder"
 
 export const Item: FunctionComponent<{
   mail: MailInterface.MailReceived.Fetch
@@ -234,21 +235,27 @@ const ItemWithContextMenu: FunctionComponent<{
             </ContextMenuSubContent>
           </ContextMenuSub>
         )}
-        <ContextMenuSeparator />
-        {mailReceived.data.folder === "TRASH" ? (
-          <ContextMenuItem
-            onClick={() => deleteMail()}
-            className="gap-2 text-red-700">
-            <Trash2Icon className="h-4 w-4" />
-            Delete permanently
-          </ContextMenuItem>
-        ) : (
-          <ContextMenuItem
-            onClick={() => moveMailTo("TRASH")}
-            className="gap-2 text-red-700">
-            <Trash2Icon className="h-4 w-4" />
-            Trash
-          </ContextMenuItem>
+        {mailReceived.data.folder === "TRASH" && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuItem
+              onClick={() => deleteMail()}
+              className="gap-2 text-red-700">
+              <Trash2Icon className="h-4 w-4" />
+              Delete permanently
+            </ContextMenuItem>
+          </>
+        )}
+        {["INBOX", "SPAM", "ARCHIVE", "IMPORTANT"].includes(mailReceived.data.folder) && (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuItem
+              onClick={() => moveMailTo("TRASH")}
+              className="gap-2 text-red-700">
+              <Trash2Icon className="h-4 w-4" />
+              Trash
+            </ContextMenuItem>
+          </>
         )}
       </ContextMenuContent>
     </ContextMenu >
@@ -262,7 +269,11 @@ type ItemBodyProps = {
   isSelected: boolean
 }
 
-function ItemBody({ mail, mailReceived, isSelected, mailLink }: ItemBodyProps) {
+function ItemBody({ mail, mailReceived, mailLink }: ItemBodyProps) {
+  const { filter } = Route.useSearch()
+  if (filter && !utils.filterMailBySearch(mail, filter))
+    return null
+
   return (
     <Link
       to={mailLink}

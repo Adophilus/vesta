@@ -1,12 +1,11 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { CreateProfileForm } from './-components/create-profile-form'
 import { useAuthStore } from '@/lib/hooks/auth'
-import UserProfileService from '@/lib/services/user-profile'
 
 export const Route = createFileRoute('/profile/create')({
   component: CreateProfilePage,
   beforeLoad: async () => {
-    const { isSignedIn, user, profiles } = useAuthStore.getState()
+    const { isSignedIn, profiles } = useAuthStore.getState()
     if (!isSignedIn) {
       throw redirect({
         to: '/auth/sign-in'

@@ -17,6 +17,27 @@ namespace MailService {
     return mail
   }
 
+  type GetSentMailsPayload = {
+    profile: SerializedJunoDoc<UserProfileInterface.UserProfile.Fetch>
+  }
+
+  export const getSentMails = async ({ profile }: GetSentMailsPayload): Promise<MailInterface.MailReceived.Fetch[]> => {
+    const docs: ListResults<MailInterface.MailReceived.Fetch> = await listDocs({
+      collection: MAILS_SENT_COLLECTION_KEY,
+      filter: {
+        matcher: {
+          description: `<|senderEmail:${profile.data.email}|>`
+        },
+        order: {
+          desc: true,
+          field: "created_at",
+        },
+      },
+    });
+
+    return docs.items
+  }
+
   type GetReceivedMailsPayload = {
     profile: SerializedJunoDoc<UserProfileInterface.UserProfile.Fetch>
   }
@@ -54,6 +75,7 @@ namespace MailService {
       collection: MAILS_SENT_COLLECTION_KEY,
       doc: {
         key: ulid(),
+        description: `<|senderEmail:${payload.sender.email}|>`,
         data: {
           ...payload,
           sentAt: new Date()
@@ -61,14 +83,15 @@ namespace MailService {
       },
     });
 
-    for (const recipient of [payload.recipientEmail, ...payload.cc, ...payload.bcc]) {
+    for (const recipient of [payload.recipientEmail, payload.sender.email, ...payload.cc, ...payload.bcc]) {
+      const folder = recipient === payload.sender.email ? "SENT" : "INBOX"
       await setDoc<MailInterface.MailReceived.Create>({
         collection: MAILS_RECEIVED_COLLECTION_KEY,
         doc: {
           key: ulid(),
           description: `<|recipientEmail:${recipient}|>`,
           data: {
-            folder: "INBOX",
+            folder,
             mailId: mail.key,
             sender: payload.sender,
             recipientEmail: recipient,

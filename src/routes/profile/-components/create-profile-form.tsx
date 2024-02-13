@@ -12,6 +12,7 @@ import { Input } from "@/components/shad/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shad/ui/select"
 import { SelectGroup } from "@radix-ui/react-select"
 import UserProfileService from "@/lib/services/user-profile"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   firstName: z.string(),
@@ -21,7 +22,7 @@ const formSchema = z.object({
 })
 
 const emailExtensions = [
-  "myjunoapp.com"
+  "jmail.com"
 ]
 
 type FormSchema = z.infer<typeof formSchema>
@@ -66,10 +67,15 @@ export function CreateProfileForm() {
       userId: user.key,
       organizationId: "" // TODO: Add organizationId
     })
-
-    await refetchProfiles()
-
-    setIsSubmitting(false)
+      .then(async () => {
+        await refetchProfiles()
+        setIsSubmitting(false)
+      })
+      .catch(err => {
+        console.log(err)
+        toast.error("An error occurred while creating profile")
+        setIsSubmitting(false)
+      })
   }
 
   return (

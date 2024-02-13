@@ -9,15 +9,16 @@ import {
 import { useAuthStore } from "@/lib/hooks/auth"
 import { useState } from "react"
 import { FunctionComponent } from "react"
+import { useProfile } from "@/lib/hooks/profile"
 
 export const AccountSwitcher: FunctionComponent = () => {
+  const profile = useProfile()
+
   const {
     profiles,
     setActiveProfile,
-    activeProfile: activeProfileIndex
   } = useAuthStore(store => ({
-    profiles: store.profiles,
-    activeProfile: store.activeProfile,
+    profiles: store.profiles!,
     setActiveProfile: store.setActiveProfile
   }))
 
@@ -25,12 +26,11 @@ export const AccountSwitcher: FunctionComponent = () => {
 
   if (!profiles || profiles.length === 0) return null
 
-  const activeProfile = profiles[activeProfileIndex!]
-  const profileFullName = `${activeProfile.data.firstName} ${activeProfile.data.lastName}`
+  const profileFullName = `${profile.data.firstName} ${profile.data.lastName}`
 
   return (
     <Select
-      defaultValue={activeProfileIndex!.toString()}
+      defaultValue={profile.data.email}
       onValueChange={value => setActiveProfile(parseInt(value))}
     >
       <SelectTrigger
@@ -48,7 +48,7 @@ export const AccountSwitcher: FunctionComponent = () => {
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {profiles!.map((profile, index) => (
+        {profiles.map((profile, index) => (
           <SelectItem
             key={profile.data.email}
             value={index.toString()}

@@ -1,0 +1,5 @@
+.banner-txt::selection {
+  color: #7888ff;
+  background-color: black;
+  -webkit-text-stroke-color: white;
+}

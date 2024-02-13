@@ -4,12 +4,11 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 import path from "path"
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     nodePolyfills(),
     TanStackRouterVite(),
-    react()
+    react(),
   ],
   resolve: {
     alias: {

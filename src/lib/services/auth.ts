@@ -2,12 +2,18 @@ import { signIn as junoSignIn, signOut as junoSignOut, authSubscribe, User, init
 
 namespace AuthService {
   export const init = async () => {
+    const satelliteId = import.meta.env.VITE_SATELLITE_ID as string
+
     await initJuno({
-      satelliteId: import.meta.env.VITE_SATELLITE_ID as string,
+      satelliteId,
       workers: {
         auth: true,
       },
-    });
+    })
+      // .catch(err => {
+      //   console.log(err)
+      //   alert("Please check your internet connection and try again")
+      // });
   }
 
   export const signIn = async () => await junoSignIn()

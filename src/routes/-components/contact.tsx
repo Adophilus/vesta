@@ -3,12 +3,13 @@ import { InputProps } from "@/components/shad/ui/input"
 import { TextareaProps } from "@/components/shad/ui/textarea"
 import { cn } from "@/lib/shad/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { forwardRef } from "react"
+import { forwardRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "./button"
 import { SendHorizonalIcon } from "lucide-react"
 import { Section } from "./section"
+import { toast } from "sonner"
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
@@ -45,6 +46,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -55,8 +57,19 @@ function ContactForm() {
     }
   })
 
-  const onSubmit = (data: FormSchema) => {
+  // TODO: Implement form submission
+  const onSubmit = async (data: FormSchema) => {
+    setIsSubmitting(true)
 
+    toast.promise(
+      new Promise((resolve, reject) => setTimeout(() => reject("Sorry an error occurred, please try again later"), 2000)),
+      {
+        loading: "Sending...",
+        error: (error) => error,
+      }
+    )
+
+    setIsSubmitting(false)
   }
 
   return (
@@ -113,7 +126,11 @@ function ContactForm() {
             )}
           />
           <div className="flex justify-end">
-            <Button className="border-white font-semibold flex items-center gap-2">
+            <Button
+              disabled={isSubmitting}
+              type="submit"
+              className="border-white font-semibold flex items-center gap-2"
+            >
               Send
               <SendHorizonalIcon className="w-4 h-4" />
             </Button>

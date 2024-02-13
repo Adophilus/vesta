@@ -10,10 +10,10 @@ namespace AuthService {
         auth: true,
       },
     })
-      // .catch(err => {
-      //   console.log(err)
-      //   alert("Please check your internet connection and try again")
-      // });
+      .catch(err => {
+        console.log(err)
+        alert("Please check your internet connection and try again")
+      });
   }
 
   export const signIn = async () => await junoSignIn()

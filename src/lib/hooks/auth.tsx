@@ -1,7 +1,7 @@
 import { User as JunoUser } from "@junobuild/core";
 import { FunctionComponent, ReactNode, useEffect } from "react";
 import { create } from "zustand";
-import { combine, persist } from "zustand/middleware";
+import { combine, createJSONStorage, persist } from "zustand/middleware";
 import AuthService from "../services/auth";
 import UserProfileService from "../services/user-profile";
 import UserProfileInterface from "../interfaces/user-profile";
@@ -129,7 +129,8 @@ export const useAuthStore = create(
         }
       }),
     {
-      name: "juno-auth"
+      name: "juno-auth",
+      storage: createJSONStorage(() => sessionStorage)
     }
   )
 )
@@ -150,12 +151,16 @@ export const AuthProvider: FunctionComponent<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     const unsubscribe = init((user) => {
+      console.log(user)
       if (!user) {
         navigate({
           to: "/auth/sign-in",
         })
         return
       }
+
+      console.log(user.profiles)
+      console.log(pathname)
 
       if (user.profiles.length === 0) {
         navigate({

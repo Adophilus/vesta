@@ -86,7 +86,7 @@ const formSchema = z.object({
   subject: z.string(),
   cc: z.array(z.string().email()),
   bcc: z.array(z.string().email()),
-  body: z.string(),
+  body: z.string().min(1, { message: "Please enter a message" }),
 })
 
 type FormSchema = z.infer<typeof formSchema>

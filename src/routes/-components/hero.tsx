@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion"
 import "./hero.css"
 import "./navbar.css"
+import Typography from "./typography";
 
 export function Hero() {
   return (
@@ -11,7 +12,7 @@ export function Hero() {
       className="h-screen relative flex flex-col bg-cover bg-center hero"
     >
       <div
-        className="backed grow flex flex-col gap-12 items-center justify-center"
+        className="backed grow flex flex-col gap-12 items-center justify-center py-24"
       >
         <div className="flex flex-col gap-y-4 p-4">
           <div className="flex justify-center">
@@ -20,17 +21,7 @@ export function Hero() {
           <header
             className="font-Poppins font-bold text-center text-5xl leading-relaxed lg:leding-noraml lg:text-7xl 2xl:text-8xl max-w-2xl lg:max-w-5xl 2xl:max-w-6xl px-4 lg:px-8"
           >
-            Increase <span
-              style={{ WebkitTextStroke: "3px black" }}
-              className="text-primary"
-            >
-              productivity
-            </span> with our all-in-one <span
-              style={{ WebkitTextStroke: "3px black" }}
-              className="text-primary"
-            >
-              Platform
-            </span>
+            Increase Team <Typography.Accent>Productivity</Typography.Accent> With Our All-In-One <Typography.Accent>Platform</Typography.Accent>
           </header>
         </div>
         <Link

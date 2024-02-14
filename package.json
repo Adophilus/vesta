@@ -1,5 +1,5 @@
 {
-  "name": "jmail",
+  "name": "vesta",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -37,6 +37,7 @@
     "@tanstack/react-query-devtools": "^5.20.1",
     "@tanstack/react-router": "^1.16.0",
     "@tanstack/router-devtools": "^1.16.0",
+    "@xstate/react": "^4.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
@@ -57,6 +58,7 @@
     "true-myth": "^7.1.0",
     "twin.macro": "^3.4.1",
     "ulidx": "^2.3.0",
+    "xstate": "^5.6.2",
     "zod": "^3.22.4",
     "zustand": "^4.5.0"
   },

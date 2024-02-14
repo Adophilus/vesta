@@ -28,7 +28,7 @@ function WorkspacePage() {
         }}
       >
         <ArrowLeftIcon className="w-6 h-6" />
-        Back to mail
+        Back
       </button>
     </div>
   )

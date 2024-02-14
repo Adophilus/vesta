@@ -30,7 +30,11 @@ export function Layout({ children }: { children: ReactNode }) {
               !isCollapsed
             )}`
           }}
-          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out", "flex flex-col grow")}
+          className={cn(
+            isCollapsed
+            && "min-w-[50px] transition-all duration-300 ease-in-out",
+            "flex flex-col grow "
+          )}
         >
           <Sidebar />
         </ResizablePanel>
@@ -38,6 +42,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <ResizablePanel
           defaultSize={440}
           minSize={30}
+          className="h-screen"
         >
           {children}
         </ResizablePanel>

@@ -30,8 +30,8 @@ export function Navbar() {
               to="/"
               className="flex items-end select-none"
             >
-              <span className="text-primary">J</span>
-              Mail
+              <span className="text-primary">V</span>
+              esta
               <DotIcon className="-ml-2 -mb-1 stroke-primary h-8 w-8" />
             </Link>
           </div>
@@ -52,7 +52,7 @@ export function Navbar() {
               className="hover:text-primary transition-colors duration-250"
               to="/presentation"
             >
-              Presentation
+              Demo
             </Link>
             <Link
               className="hover:text-primary transition-colors duration-250"
@@ -123,7 +123,7 @@ function MobileNav() {
               to="/presentation"
               onClick={onClose}
             >
-              Presentation
+              Demo
             </Link>
             <Link
               className="hover:text-primary transition-colors duration-250"

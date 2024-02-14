@@ -49,6 +49,7 @@ import * as utils from "../utils"
 import MailTooltip from "./tooltips"
 import { ReplyForm } from "./reply-form"
 import { MailBody } from "./body"
+import { ScrollArea } from "@radix-ui/react-scroll-area"
 
 export const MailDisplay: FunctionComponent<{
   mail: MailInterface.MailSent.Fetch
@@ -88,7 +89,7 @@ export const MailDisplay: FunctionComponent<{
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-screen flex-col">
       <div className="flex items-center p-2">
         <div className="flex items-center gap-2">
           {mailReceived.data.folder === "TRASH" && (
@@ -220,7 +221,7 @@ export const MailDisplay: FunctionComponent<{
           </div>
         </div>
         <Separator />
-        <div className="flex flex-col grow whitespace-pre-wrap p-4 text-sm">
+        <div className="flex flex-col h-full overeflow-y-scroll whitespace-pre-wrap p-4 text-sm">
           <MailBody mail={mail} />
         </div>
         <Separator className="mt-auto" />

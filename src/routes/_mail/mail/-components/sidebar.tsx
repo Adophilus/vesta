@@ -29,7 +29,7 @@ export const useSidebar = create(
   )
 )
 
-export function Sidebar() {
+export function Sidebar({ className }: { className?: string }) {
   const signOutUser = useAuthStore(store => store.signOut)
   const isCollapsed = useSidebar(store => store.isCollapsed)
   const navigate = useNavigate()
@@ -43,7 +43,7 @@ export function Sidebar() {
   }
 
   return (
-    <div className="flex flex-col grow">
+    <div className={cn("flex flex-col h-screen", className)}>
       <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
         <AccountSwitcher />
       </div>

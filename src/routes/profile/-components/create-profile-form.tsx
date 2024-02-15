@@ -22,7 +22,7 @@ const formSchema = z.object({
 })
 
 const emailExtensions = [
-  "@jmail.com"
+  "@vmail.com"
 ]
 
 type FormSchema = z.infer<typeof formSchema>

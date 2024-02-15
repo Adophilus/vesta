@@ -17,7 +17,7 @@ import { toast } from "sonner"
 const formSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string().regex(/^[a-zA-Z0-9]+$/, { message: "Please enter in the prefix before @"}),
+  email: z.string().regex(/^[a-zA-Z0-9]+$/, { message: "Please enter in the prefix before @" }),
   emailExtension: z.string()
 })
 
@@ -76,7 +76,15 @@ export function CreateProfileForm() {
         loading: "Creating profile",
         success: (msg) => {
           refetchProfiles()
-            .then(() => setIsSubmitting(false))
+            .then(() => {
+              navigate({
+                to: "/mail/$mailFolder",
+                params: {
+                  mailFolder: "inbox"
+                }
+              })
+              setIsSubmitting(false)
+            })
           return msg
         },
         error: (err) => {
@@ -143,7 +151,12 @@ export function CreateProfileForm() {
                         <SelectContent>
                           <SelectGroup>
                             {emailExtensions.map((extension) => (
-                              <SelectItem value={extension}>{extension}</SelectItem>
+                              <SelectItem
+                                key={extension}
+                                value={extension}
+                              >
+                                {extension}
+                              </SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>

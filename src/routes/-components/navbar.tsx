@@ -28,9 +28,13 @@ export function Navbar() {
           <div className="flex items-center text-3xl font-semibold backed">
             <Link
               to="/"
-              className="flex items-end select-none"
+              className="flex items-center select-none"
             >
-              <span className="text-primary">V</span>
+              <img
+                src="/images/vesta-500x500.png"
+                className="w-8 h-8 -mr-1"
+                alt="logo"
+              />
               esta
               <DotIcon className="-ml-2 -mb-1 stroke-primary h-8 w-8" />
             </Link>

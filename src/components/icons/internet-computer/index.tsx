@@ -11,7 +11,7 @@ export default function({ className, ...props }: SVGProps<SVGSVGElement>) {
       xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       viewBox="0 0 358.8 179.8"
       xmlSpace="preserve"
-      className={cn("icon", className)}
+      className={cn("internet-computer-icon", className)}
       {...props}
     >
       <title>

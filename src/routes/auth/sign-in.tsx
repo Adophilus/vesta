@@ -54,7 +54,7 @@ export default function SignInPage() {
           <SignInForm />
           <div />
         </div>
-      </div >
+      </div>
     </AuthProvider>
   )
 }

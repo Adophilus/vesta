@@ -1,4 +1,4 @@
-# <img src="./public/images/logo.svg" style="width: 32px; height: 32px" />Vesta
+# <img src="./public/images/vesta-500x500.png" style="width: 32px; height: 32px" />Vesta
 > An all in one platform for increasing team productivity
 
 Live deployment: [https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io](https://pdurl-fqaaa-aaaal-adlga-cai.icp0.io)

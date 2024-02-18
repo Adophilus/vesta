@@ -58,12 +58,12 @@ export function Navbar() {
             >
               Demo
             </Link>
-            <a
-              href="https://youtu.be/YpHuPJu1V20"
+            <Link
+              to="/presentation"
               className="hover:text-primary transition-colors duration-250"
             >
               Presentation
-            </a>
+            </Link>
             <Link
               className="hover:text-primary transition-colors duration-250"
               to="/mail/$mailFolder"

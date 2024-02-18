@@ -58,6 +58,12 @@ export function Navbar() {
             >
               Demo
             </Link>
+            <a
+              href="https://youtu.be/YpHuPJu1V20"
+              className="hover:text-primary transition-colors duration-250"
+            >
+              Presentation
+            </a>
             <Link
               className="hover:text-primary transition-colors duration-250"
               to="/mail/$mailFolder"
@@ -129,6 +135,17 @@ function MobileNav() {
             >
               Demo
             </Link>
+            <a
+              className="hover:text-primary transition-colors duration-250"
+              href="https://youtu.be/YpHuPJu1V20"
+            >
+              <button
+                type="button"
+                onClick={onClose}
+              >
+                Presentation
+              </button>
+            </a>
             <Link
               className="hover:text-primary transition-colors duration-250"
               to="/mail/$mailFolder"

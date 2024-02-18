@@ -4,7 +4,7 @@ export const Route = createFileRoute('/about')({
   component: AboutPage
 })
 
-const youtubeLink = "https://youtu.be/FHKsPazBrno"
+const youtubeLink = "https://youtu.be/qagF1Yo__M0"
 
 function AboutPage() {
   window.location.href = youtubeLink

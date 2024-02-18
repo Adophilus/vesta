@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as WorkspaceImport } from './routes/workspace'
 import { Route as PresentationImport } from './routes/presentation'
+import { Route as DemoImport } from './routes/demo'
 import { Route as AboutImport } from './routes/about'
 import { Route as MailImport } from './routes/_mail'
 import { Route as IndexImport } from './routes/index'
@@ -32,6 +33,11 @@ const WorkspaceRoute = WorkspaceImport.update({
 
 const PresentationRoute = PresentationImport.update({
   path: '/presentation',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DemoRoute = DemoImport.update({
+  path: '/demo',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -97,6 +103,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/demo': {
+      preLoaderRoute: typeof DemoImport
+      parentRoute: typeof rootRoute
+    }
     '/presentation': {
       preLoaderRoute: typeof PresentationImport
       parentRoute: typeof rootRoute
@@ -142,6 +152,7 @@ export const routeTree = rootRoute.addChildren([
     ]),
   ]),
   AboutRoute,
+  DemoRoute,
   PresentationRoute,
   WorkspaceRoute,
   AuthSignInRoute,

@@ -135,17 +135,12 @@ function MobileNav() {
             >
               Demo
             </Link>
-            <a
+            <Link
               className="hover:text-primary transition-colors duration-250"
-              href="https://youtu.be/YpHuPJu1V20"
+              to="/presentation"
             >
-              <button
-                type="button"
-                onClick={onClose}
-              >
-                Presentation
-              </button>
-            </a>
+              Presentation
+            </Link>
             <Link
               className="hover:text-primary transition-colors duration-250"
               to="/mail/$mailFolder"

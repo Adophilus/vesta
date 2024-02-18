@@ -54,7 +54,7 @@ export function Navbar() {
             </a>
             <Link
               className="hover:text-primary transition-colors duration-250"
-              to="/presentation"
+              to="/demo"
             >
               Demo
             </Link>
@@ -130,7 +130,7 @@ function MobileNav() {
             </Link>
             <Link
               className="hover:text-primary transition-colors duration-250"
-              to="/presentation"
+              to="/demo"
               onClick={onClose}
             >
               Demo
